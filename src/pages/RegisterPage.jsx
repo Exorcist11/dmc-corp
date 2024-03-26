@@ -4,13 +4,14 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { SlBan } from "react-icons/sl";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import axios from "axios";
 
 export default function RegisterPage() {
   useEffect(() => {
     document.title = "Tạo tài khoản";
   });
 
-  let [err, setErr] = useState([])
+  let [err, setErr] = useState([]);
   const navigate = useNavigate();
   const [account, setAccount] = useState();
 
@@ -20,6 +21,25 @@ export default function RegisterPage() {
       ...preState,
       [name]: value,
     }));
+  };
+
+  const handleSubmit = async () => {
+    let errs = [];
+
+    if (!account?.username) {
+      errs.push("Tài khoản không được để trống!");
+    } else if (!account?.password) {
+      errs.push("Mật khẩu không được để trống!");
+    } else if (account?.password !== account?.re_password) {
+      errs.push("Không trùng mật khẩu!");
+    }
+
+    await axios
+      .post("http://127.0.0.1:9999/register", account)
+      .then(() => navigate("/"))
+      .catch((error) => errs.push(error?.response.data.message));
+
+    setErr(errs);
   };
 
   return (
@@ -42,11 +62,15 @@ export default function RegisterPage() {
           <Input
             placeholder="Xác nhận mật khẩu"
             type="Password"
-            name="re-password"
+            name="re_password"
             onChange={handleChange}
           />
 
-          <Button variant="secondary" className="hover:bg-slate-300 w-full">
+          <Button
+            variant="secondary"
+            className="hover:bg-slate-300 w-full"
+            onClick={handleSubmit}
+          >
             Tạo tài khoản
           </Button>
 
@@ -57,13 +81,13 @@ export default function RegisterPage() {
             Quay lại cửa hàng
           </h1>
 
-          <Alert variant="destructive">
-            <SlBan />
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>
-              Your session has expired. Please log in again.
-            </AlertDescription>
-          </Alert>
+          {err?.map((error) => (
+            <Alert variant="destructive" key={error}>
+              <SlBan />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          ))}
         </div>
       </div>
     </div>
