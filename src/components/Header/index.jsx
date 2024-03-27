@@ -17,9 +17,17 @@ export default function Header() {
       <div className="flex gap-7 uppercase">
         <div
           className="flex items-center gap-2 cursor-pointer"
-          onClick={() => navigate("/login")}
+          onClick={() =>
+            localStorage.getItem("user_id")
+              ? navigate(`/account`)
+              : navigate("/login")
+          }
         >
-          <h1>Đăng nhập</h1>
+          {!localStorage.getItem("user_id") ? (
+            <h1>Đăng nhập</h1>
+          ) : (
+            <h1>Tài khoản</h1>
+          )}
           <SlUser />
         </div>
 

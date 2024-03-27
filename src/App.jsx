@@ -1,14 +1,30 @@
 import { Route, Routes } from "react-router-dom";
-import { publicRoute } from "./routers";
+import { accountRoute, publicRoute } from "./routers";
 import { Fragment } from "react";
-import clientLayout from "./components/Layout/clientLayout";
+import ClientLayout from "./components/Layout/ClientLayout";
+import UserLayout from "./components/Layout/UserLayout";
 
 function App() {
   return (
     <div>
       <Routes>
         {publicRoute.map((route, index) => {
-          const Layout = route.layout === null ? Fragment : clientLayout;
+          const Layout = route.layout === null ? Fragment : ClientLayout;
+          const Page = route.page;
+          return (
+            <Route
+              key={index}
+              path={route?.path}
+              element={
+                <Layout>
+                  <Page />
+                </Layout>
+              }
+            />
+          );
+        })}
+        {accountRoute.map((route, index) => {
+          const Layout = route.layout === null ? Fragment : UserLayout;
           const Page = route.page;
           return (
             <Route

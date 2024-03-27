@@ -1,6 +1,6 @@
 export default function index() {
   return (
-    <div className="flex-shrink-0 bg-[#f8f7f4]">
+    <div className="flex-shrink-0 border-t-[1px]">
       <div className="flex gap-5 justify-center mx-10 text-sm py-10">
         <div className="w-1/4 flex flex-col gap-3">
           <div className="flex flex-col gap-3">

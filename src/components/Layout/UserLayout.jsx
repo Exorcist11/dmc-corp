@@ -1,0 +1,70 @@
+import Header from "../Header";
+import Footer from "../Footer";
+import { useNavigate } from "react-router-dom";
+import {
+  SlNote,
+  SlNotebook,
+  SlHeart,
+  SlEye,
+  SlLogout,
+  SlTag,
+} from "react-icons/sl";
+import React from "react";
+
+// eslint-disable-next-line react/prop-types
+export default function UserLayout({ children }) {
+  const items = [
+    { name: "Mã ưu đãi", path: "/address", icon: <SlTag /> },
+    { name: "Sổ địa chỉ", path: "/account/address", icon: <SlNotebook /> },
+    { name: "Yêu thích", path: "/account/favorite", icon: <SlHeart /> },
+    { name: "Sản phẩm đã xem", path: "/account/history", icon: <SlEye /> },
+    { name: "Đăng xuất", path: "/", icon: <SlLogout /> },
+  ];
+  const navigate = useNavigate();
+  return (
+    <div className="flex flex-col h-screen">
+      <Header />
+      <div className="px-28 py-5 bg-[#fafafa] h-full flex flex-col gap-5">
+        <div>
+          <h1 className="text-sm hover:font-semibold hover:underline cursor-pointer" onClick={() => navigate('/')}>Quay về trang chủ</h1>
+        </div>
+        <div className="flex gap-10">
+          <div className="bg-[#ffffff] w-1/3 rounded-lg border-[1px] flex flex-col gap-5 py-6">
+            <div className="flex items-center flex-col gap-3">
+              <div className="bg-[url('https://gcs.tripi.vn/public-tripi/tripi-feed/img/473236jVA/culture_devilmaycry5_review.jpg')] bg-center bg-cover w-16 h-16 rounded-full flex items-center justify-center"></div>
+              <div
+                className="flex gap-2 items-center cursor-pointer"
+                onClick={() => navigate("/account")}
+              >
+                <h1 className="font-semibold">Devil May Cry</h1>
+                <SlNote />
+              </div>
+            </div>
+
+            <div className="px-6">
+              <div className="bg-gradient-to-r from-green-500 to-blue-500 w-full h-20 rounded-md"></div>
+            </div>
+
+            <div className="">
+              {items?.map((item, index) => (
+                <div
+                  className="flex gap-3 items-center cursor-pointer hover:bg-[#edf1f5] px-6 py-3"
+                  key={index}
+                  onClick={() => navigate(`${item.path}`)}
+                >
+                  <React.Fragment>{item.icon}</React.Fragment>
+                  <h1>{item.name}</h1>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-[#ffffff] w-2/3 rounded-lg border-[1px] p-4">
+            {children}
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
+}
