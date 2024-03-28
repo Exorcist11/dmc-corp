@@ -4,6 +4,8 @@ import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
 import UserPage from "@/pages/userPages/UserPage";
 import Address from "@/pages/userPages/Address";
+import AdminPage from "@/pages/dashBoards/AdminPage";
+import RolePage from "@/pages/dashBoards/RolePage";
 
 const publicRoute = [
   { path: "/login", page: LoginPage },
@@ -12,8 +14,14 @@ const publicRoute = [
   { path: "/forget", page: ForgetPasswordPage },
   // { path: "/account", page: UserPage },
 ];
+
 const accountRoute = [
   { path: "/account", page: UserPage },
   { path: "/account/address", page: Address },
 ];
-export { publicRoute, accountRoute };
+
+const adminRoute = [
+  { path: "/dashboard", page: AdminPage },
+  { path: "/role", page: RolePage },
+];
+export { publicRoute, accountRoute, adminRoute };

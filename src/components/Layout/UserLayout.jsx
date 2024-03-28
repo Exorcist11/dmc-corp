@@ -20,13 +20,19 @@ export default function UserLayout({ children }) {
     { name: "Sản phẩm đã xem", path: "/account/history", icon: <SlEye /> },
     { name: "Đăng xuất", path: "/", icon: <SlLogout /> },
   ];
+
   const navigate = useNavigate();
   return (
     <div className="flex flex-col h-screen">
       <Header />
       <div className="px-28 py-5 bg-[#fafafa] h-full flex flex-col gap-5">
         <div>
-          <h1 className="text-sm hover:font-semibold hover:underline cursor-pointer" onClick={() => navigate('/')}>Quay về trang chủ</h1>
+          <h1
+            className="text-sm hover:font-semibold hover:underline cursor-pointer"
+            onClick={() => navigate("/")}
+          >
+            Quay về trang chủ
+          </h1>
         </div>
         <div className="flex gap-10">
           <div className="bg-[#ffffff] w-1/3 rounded-lg border-[1px] flex flex-col gap-5 py-6">

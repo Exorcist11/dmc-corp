@@ -1,6 +1,10 @@
 import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
 
 export default function Address() {
+  useEffect(() => {
+    document.title = "Sổ địa chỉ";
+  });
   return (
     <div className="flex flex-col gap-3">
       <h1 className="text-xl font-semibold">Sổ địa chỉ</h1>

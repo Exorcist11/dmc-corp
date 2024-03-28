@@ -1,8 +1,9 @@
 import { Route, Routes } from "react-router-dom";
-import { accountRoute, publicRoute } from "./routers";
+import { accountRoute, adminRoute, publicRoute } from "./routers";
 import { Fragment } from "react";
 import ClientLayout from "./components/Layout/ClientLayout";
 import UserLayout from "./components/Layout/UserLayout";
+import Dashboard from "./components/Layout/Dashboard";
 
 function App() {
   return (
@@ -25,6 +26,22 @@ function App() {
         })}
         {accountRoute.map((route, index) => {
           const Layout = route.layout === null ? Fragment : UserLayout;
+          const Page = route.page;
+          return (
+            <Route
+              key={index}
+              path={route?.path}
+              element={
+                <Layout>
+                  <Page />
+                </Layout>
+              }
+            />
+          );
+        })}
+
+        {adminRoute.map((route, index) => {
+          const Layout = route.layout === null ? Fragment : Dashboard;
           const Page = route.page;
           return (
             <Route

@@ -32,12 +32,12 @@ export default function RegisterPage() {
       errs.push("Mật khẩu không được để trống!");
     } else if (account?.password !== account?.re_password) {
       errs.push("Không trùng mật khẩu!");
+    } else {
+      await axios
+        .post("http://127.0.0.1:9999/register", account)
+        .then(() => navigate("/"))
+        .catch((error) => errs.push(error?.response.data.message));
     }
-
-    await axios
-      .post("http://127.0.0.1:9999/register", account)
-      .then(() => navigate("/"))
-      .catch((error) => errs.push(error?.response.data.message));
 
     setErr(errs);
   };

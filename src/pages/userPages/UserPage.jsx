@@ -9,9 +9,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function UserPage() {
+  useEffect(() => {
+    document.title = "Thông tin cá nhân";
+  });
   const [date, setDate] = useState("");
 
   return (
