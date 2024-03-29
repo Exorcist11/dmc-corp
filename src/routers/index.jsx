@@ -6,6 +6,7 @@ import UserPage from "@/pages/userPages/UserPage";
 import Address from "@/pages/userPages/Address";
 import AdminPage from "@/pages/dashBoards/AdminPage";
 import RolePage from "@/pages/dashBoards/RolePage";
+import Customers from "@/pages/dashBoards/Customers";
 
 const publicRoute = [
   { path: "/login", page: LoginPage },
@@ -23,5 +24,6 @@ const accountRoute = [
 const adminRoute = [
   { path: "/dashboard", page: AdminPage },
   { path: "/role", page: RolePage },
+  { path: "/customers/:role", page: Customers },
 ];
 export { publicRoute, accountRoute, adminRoute };

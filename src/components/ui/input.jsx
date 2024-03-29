@@ -2,18 +2,20 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-// eslint-disable-next-line react/prop-types
-const Input = React.forwardRef(({ className, type, ...props }, ref) => {
+const Input = React.forwardRef(({ className, type, icon, ...props }, ref) => {
   return (
-    <input
-      type={type}
-      className={cn(
-        "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-        className
-      )}
-      ref={ref}
-      {...props}
-    />
+    <div className="flex items-center gap-2 border h-10 rounded-md border-input bg-white pl-3 text-sm ring-offset-background focus-within:ring-ring focus-within:ring-offset-2 w-full">
+      <React.Fragment>{icon}</React.Fragment>
+      <input
+        type={type}
+        className={cn(
+          "w-full p-2 placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+          className
+        )}
+        ref={ref}
+        {...props}
+      />
+    </div>
   );
 });
 Input.displayName = "Input";

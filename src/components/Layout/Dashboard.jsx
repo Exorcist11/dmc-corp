@@ -13,7 +13,6 @@ import {
 } from "react-icons/sl";
 import { useNavigate } from "react-router-dom";
 
-// eslint-disable-next-line react/prop-types
 export default function Dashboard({ children }) {
   const [hidden, setHidden] = useState(false);
   const [selectedAppMenu, setSelectedAppMenu] = useState(null);
@@ -50,11 +49,11 @@ export default function Dashboard({ children }) {
         },
         {
           name: "Administration",
-          link: "/admin",
+          link: "/customers/R2",
         },
         {
           name: "Customers",
-          link: "/customer",
+          link: "/customers/R1",
         },
         {
           name: "Role",
@@ -127,7 +126,11 @@ export default function Dashboard({ children }) {
                       )
                     }
                   >
-                    {selectedAppMenu === index ? <SlArrowDown size={8} /> : <SlArrowRight size={8} />}
+                    {selectedAppMenu === index ? (
+                      <SlArrowDown size={8} />
+                    ) : (
+                      <SlArrowRight size={8} />
+                    )}
                     {item.icon}
                     <h1>{item.name}</h1>
                   </div>
@@ -142,7 +145,15 @@ export default function Dashboard({ children }) {
                           navigate(`${item_action.link}`);
                         }}
                       >
-                        <h1 className={`${hightlight === index_action ? 'text-[#68acfa] font-medium' : ''}`}>{item_action.name}</h1>
+                        <h1
+                          className={`${
+                            hightlight === index_action
+                              ? "text-[#68acfa] font-medium"
+                              : ""
+                          }`}
+                        >
+                          {item_action.name}
+                        </h1>
                       </div>
                     ))}
                 </div>

@@ -11,7 +11,6 @@ import {
 } from "react-icons/sl";
 import React from "react";
 
-// eslint-disable-next-line react/prop-types
 export default function UserLayout({ children }) {
   const items = [
     { name: "Mã ưu đãi", path: "/address", icon: <SlTag /> },

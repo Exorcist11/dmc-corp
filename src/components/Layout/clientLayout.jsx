@@ -1,7 +1,6 @@
 import Header from "../Header";
 import Footer from "../Footer";
 
-// eslint-disable-next-line react/prop-types
 export default function ClientLayout({ children }) {
   return (
     <div className="flex flex-col h-screen">

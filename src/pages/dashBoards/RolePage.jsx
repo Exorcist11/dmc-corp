@@ -25,11 +25,6 @@ export default function RolePage() {
       [name]: value,
     }));
   };
-
-  useEffect(() => {
-    document.title = "Quản lý chức vụ";
-  });
-
   const getRole = async () => {
     await axios
       .get("http://127.0.0.1:9999/role")
@@ -38,8 +33,13 @@ export default function RolePage() {
   };
 
   useEffect(() => {
+    document.title = "Quản lý chức vụ";
     getRole();
   }, []);
+
+  // useEffect(() => {
+  //   getRole();
+  // }, []);
 
   const handleSubmit = async () => {
     if (!data?.role_id) {
