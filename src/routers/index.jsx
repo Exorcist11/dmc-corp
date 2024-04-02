@@ -7,6 +7,7 @@ import Address from "@/pages/userPages/Address";
 import AdminPage from "@/pages/dashBoards/AdminPage";
 import RolePage from "@/pages/dashBoards/RolePage";
 import Customers from "@/pages/dashBoards/Customers";
+import NewProduct from "@/pages/products/NewProduct";
 
 const publicRoute = [
   { path: "/login", page: LoginPage },
@@ -25,5 +26,6 @@ const adminRoute = [
   { path: "/dashboard", page: AdminPage },
   { path: "/role", page: RolePage },
   { path: "/customers/:role", page: Customers },
+  { path: '/dashboard/product', page: NewProduct}
 ];
 export { publicRoute, accountRoute, adminRoute };
