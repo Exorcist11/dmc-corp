@@ -16,14 +16,14 @@ export default function UserPage() {
     document.title = "Thông tin cá nhân";
   });
   const [date, setDate] = useState("");
-
+  
   return (
     <div className="flex flex-col gap-3">
       <h1 className="font-semibold text-xl">Thông tin cá nhân</h1>
 
       <div className="flex flex-col gap-1">
         <h1 className="text-sm font-semibold">Tài khoản</h1>
-        <Input className="bg-[#edf1f5]" disabled value={"aaa"} />
+        <Input className="" disabled value={localStorage.getItem('user_name')} />
       </div>
 
       <div className="flex flex-col gap-1">

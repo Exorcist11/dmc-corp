@@ -17,14 +17,13 @@ export default function UserLayout({ children }) {
     { name: "Sổ địa chỉ", path: "/account/address", icon: <SlNotebook /> },
     { name: "Yêu thích", path: "/account/favorite", icon: <SlHeart /> },
     { name: "Sản phẩm đã xem", path: "/account/history", icon: <SlEye /> },
-    { name: "Đăng xuất", path: "/", icon: <SlLogout /> },
   ];
 
   const navigate = useNavigate();
   return (
     <div className="flex flex-col h-screen">
       <Header />
-      <div className="px-28 py-5 bg-[#fafafa] h-full flex flex-col gap-5">
+      <div className="px-28 py-5 mt-[80px] bg-[#fafafa] h-full flex flex-col gap-5">
         <div>
           <h1
             className="text-sm hover:font-semibold hover:underline cursor-pointer"
@@ -61,6 +60,16 @@ export default function UserLayout({ children }) {
                   <h1>{item.name}</h1>
                 </div>
               ))}
+              <div
+                className="flex gap-3 items-center cursor-pointer hover:bg-[#edf1f5] px-6 py-3"
+                onClick={() => {
+                  localStorage.clear(); 
+                  window.location.href = "/"; 
+                }}
+              >
+                <SlLogout />
+                <h1>Đăng xuất</h1>
+              </div>
             </div>
           </div>
 

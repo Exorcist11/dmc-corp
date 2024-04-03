@@ -35,7 +35,8 @@ export default function LoginPage() {
     await axios
       .post("http://127.0.0.1:9999/login", account)
       .then((res) => {
-        localStorage.setItem("user_id", res?.data.user_id);
+        localStorage.setItem("user_id", res?.data.info.user_id);
+        localStorage.setItem("user_name", res?.data.info.username);
         navigate("/");
       })
       .catch((error) => {
