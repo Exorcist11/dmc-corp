@@ -31,19 +31,30 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
 
-
 export default function Address() {
   const [province, setProvince] = useState([]);
   const [districts, setDistrict] = useState([]);
   const [provinceID, setProvinceID] = useState("");
   const [districtID, setDistrictID] = useState("");
   const [wards, setWards] = useState([]);
+  const [address, setAddress] = useState([]);
   const getProvince = async () => {
     await axios
       .get("http://127.0.0.1:9999/provinces")
       .then((res) => setProvince(res.data.provinces))
       .catch((err) => console.log(err));
   };
+
+  const getAddress = async () => {
+    if (localStorage.getItem("user_id")) {
+      await axios
+        .get(`http://127.0.0.1:9999/address/${localStorage.getItem("user_id")}`)
+        .then((res) => setAddress(res.data.list_address))
+        .catch((err) => console.log(err));
+    }
+  };
+
+  console.log(address);
   const getDistrict = async () => {
     if (provinceID) {
       await axios
@@ -60,10 +71,17 @@ export default function Address() {
         .then((err) => console.log(err));
     }
   };
+
   useEffect(() => {
     document.title = "Sổ địa chỉ";
     getProvince();
   }, []);
+
+  useEffect(() => {
+    if (localStorage.getItem("user_id")) {
+      getAddress();
+    }
+  }, [localStorage.getItem("user_id")]);
 
   useEffect(() => {
     if (provinceID) {
@@ -78,63 +96,49 @@ export default function Address() {
   }, [districtID]);
 
   const handleClick = () => {
-    alert('click')
-  }
+    alert("click");
+  };
   return (
     <Dialog>
       <div className="flex flex-col gap-3 justify-between h-full">
         <div className="flex flex-col gap-3">
           <h1 className="text-xl font-semibold">Sổ địa chỉ</h1>
-          <div className="border-[1px] p-4 rounded-lg text-sm flex flex-col gap-2">
-            <div className="flex justify-between">
-              <h1>Devil May Cry | 0919934251</h1>
+          {address?.map((item, index) => (
+            <div
+              className="border-[1px] p-4 rounded-lg text-sm flex flex-col gap-2"
+              key={index}
+            >
+              <div className="flex justify-between">
+                <h1>
+                  {item?.full_name} | {item?.phone_number}
+                </h1>
+                <div>
+                  <label
+                    htmlFor="Sửa"
+                    className="hover:font-semibold hover:underline cursor-pointer"
+                  >
+                    Cập nhật
+                  </label>{" "}
+                  |{" "}
+                  <label
+                    htmlFor="Xoá"
+                    className="hover:font-semibold hover:underline cursor-pointer"
+                  >
+                    Xoá
+                  </label>
+                </div>
+              </div>
+              <div>{item?.note}</div>
               <div>
-                <label
-                  htmlFor="Sửa"
-                  className="hover:font-semibold hover:underline cursor-pointer"
-                >
-                  Cập nhật
-                </label>{" "}
-                |{" "}
-                <label
-                  htmlFor="Xoá"
-                  className="hover:font-semibold hover:underline cursor-pointer"
-                >
-                  Xoá
-                </label>
+                {item?.ward} - {item?.district} - {item?.province}
               </div>
             </div>
-            <div>Số nhà 55, Tân Giao</div>
-            <div>Thăng Long - Nông Cống - Thanh Hoá</div>
-          </div>
-
-          <div className="border-[1px] p-4 rounded-lg text-sm flex flex-col gap-2">
-            <div className="flex justify-between">
-              <h1>Devil May Cry | 0919934251</h1>
-              <div>
-                <label
-                  htmlFor="Sửa"
-                  className="hover:font-semibold hover:underline cursor-pointer"
-                >
-                  Cập nhật
-                </label>{" "}
-                |{" "}
-                <label
-                  htmlFor="Xoá"
-                  className="hover:font-semibold hover:underline cursor-pointer"
-                >
-                  Xoá
-                </label>
-              </div>
-            </div>
-            <div>Số nhà 55, Tân Giao</div>
-            <div>Thăng Long - Nông Cống - Thanh Hoá</div>
-          </div>
+          ))}
         </div>
 
         <div className="flex flex-col gap-3">
-          <DialogTrigger>
-            <Button className="w-full">Thêm địa chỉ</Button>
+          <DialogTrigger className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full">
+            Thêm địa chỉ
           </DialogTrigger>
 
           <DialogContent className="sm:max-w-3xl">
