@@ -26,6 +26,6 @@ const adminRoute = [
   { path: "/dashboard", page: AdminPage },
   { path: "/role", page: RolePage },
   { path: "/customers/:role", page: Customers },
-  { path: '/dashboard/product', page: NewProduct}
+  { path: '/dashboard/new_product', page: NewProduct}
 ];
 export { publicRoute, accountRoute, adminRoute };

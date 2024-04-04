@@ -10,6 +10,7 @@ import {
   SlDiamond,
   SlNotebook,
   SlRocket,
+  SlDrawer,
 } from "react-icons/sl";
 import { useNavigate } from "react-router-dom";
 
@@ -40,49 +41,52 @@ export default function Dashboard({ children }) {
 
   const appMenu = [
     {
-      name: "Accounts",
+      name: "Tài khoản",
       icon: <SlUser />,
       action: [
         {
-          name: "Add new account",
+          name: "Thêm mới tài khoản",
           link: "/new_account",
         },
         {
-          name: "Administration",
+          name: "Tài khoản quản trị",
           link: "/customers/R2",
         },
         {
-          name: "Customers",
+          name: "Tài khoản khách",
           link: "/customers/R1",
         },
         {
-          name: "Role",
+          name: "Chức vụ",
           link: "/role",
         },
       ],
     },
     {
-      name: "Products",
+      name: "Sản phẩm",
       icon: <SlDiamond />,
       action: [
-        { name: "Add new product", link: "/new_product" },
-        { name: "Rings", link: "/rings" },
-        { name: "Watchs", link: "/watchs" },
-        { name: "Necklaces", link: "/necklaces" },
+        { name: "Thêm mới sản phẩm", link: "/dashboard/new_product" },
+        { name: "Nhẫn", link: "/rings" },
+        { name: "Đồng hồ", link: "/watchs" },
+        { name: "Vòng tay", link: "/necklaces" },
+        { name: "Dây chuyền", link: "/watchs" },
+        { name: "Quà tặng", link: "/necklaces" },
       ],
     },
+    { name: "Đơn hàng", icon: <SlDrawer /> },
     { name: "News", icon: <SlNotebook /> },
-    { name: "Providers", icon: <SlRocket /> },
+    { name: "Nhà cung cấp", icon: <SlRocket /> },
   ];
 
   return (
-    <div className="flex flex-col h-screen">
-      <div className="h-16 border-b-[1px] flex justify-between px-10 items-center">
+    <div className="flex flex-col h-full">
+      <div className="h-16 border-b-[1px] flex justify-between px-10 items-center fixed top-0 z-30 left-0 right-0 bg-white">
         <div>DMC-Corp</div>
         <div>Avatar</div>
       </div>
-      <div className="flex h-full">
-        <div className="w-1/6 h-full flex flex-col bg-white border-r shadow-sm">
+      <div className="flex mt-16 ">
+        <div className=" fixed w-1/6 h-full flex  flex-col bg-white border-r shadow-sm">
           <div className="flex flex-col">
             <div
               className="flex items-center gap-3 p-4 text-sm font-medium"
@@ -161,7 +165,10 @@ export default function Dashboard({ children }) {
             </div>
           </div>
         </div>
-        <div className="bg-[#f5f7fa] w-5/6">{children}</div>
+
+        <div className="bg-[#f5f7fa] ml-1/6 w-full overflow-y-auto h-full">
+          {children}
+        </div>
       </div>
     </div>
   );
