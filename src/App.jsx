@@ -5,9 +5,12 @@ import ClientLayout from "./components/Layout/ClientLayout";
 import UserLayout from "./components/Layout/UserLayout";
 import Dashboard from "./components/Layout/Dashboard";
 
+
+
 function App() {
   return (
     <div>
+      
       <Routes>
         {publicRoute.map((route, index) => {
           const Layout = route.layout === null ? Fragment : ClientLayout;
@@ -56,6 +59,7 @@ function App() {
           );
         })}
       </Routes>
+      
     </div>
   );
 }

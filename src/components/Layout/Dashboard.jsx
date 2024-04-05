@@ -67,7 +67,7 @@ export default function Dashboard({ children }) {
       icon: <SlDiamond />,
       action: [
         { name: "Thêm mới sản phẩm", link: "/dashboard/new_product" },
-        { name: "Nhẫn", link: "/rings" },
+        { name: "Nhẫn", link: "/dashboard/rings" },
         { name: "Đồng hồ", link: "/watchs" },
         { name: "Vòng tay", link: "/necklaces" },
         { name: "Dây chuyền", link: "/watchs" },

@@ -8,6 +8,7 @@ import AdminPage from "@/pages/dashBoards/AdminPage";
 import RolePage from "@/pages/dashBoards/RolePage";
 import Customers from "@/pages/dashBoards/Customers";
 import NewProduct from "@/pages/products/NewProduct";
+import ListProduct from "@/pages/dashBoards/ListProduct";
 
 const publicRoute = [
   { path: "/login", page: LoginPage },
@@ -26,6 +27,7 @@ const adminRoute = [
   { path: "/dashboard", page: AdminPage },
   { path: "/role", page: RolePage },
   { path: "/customers/:role", page: Customers },
-  { path: '/dashboard/new_product', page: NewProduct}
+  { path: '/dashboard/new_product', page: NewProduct},
+  { path: '/dashboard/rings', page: ListProduct},
 ];
 export { publicRoute, accountRoute, adminRoute };

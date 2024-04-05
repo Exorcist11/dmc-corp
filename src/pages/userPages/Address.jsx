@@ -122,7 +122,7 @@ export default function Address() {
         .catch((err) => console.log(err));
     }
   };
-  console.log(infoAddress)
+ 
 
   useEffect(() => {
     handleGetAddress();
