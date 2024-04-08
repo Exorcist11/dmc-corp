@@ -32,7 +32,7 @@ export default function Header() {
 
   return (
     <Sheet>
-      <div className="h-20 flex justify-between items-center px-10 border-b-[1px] border-gray-300 flex-shrink-0  fixed top-0 z-30 left-0 right-0 bg-white">
+      <div className="h-20 flex justify-between items-center px-10 border-b-[1px] border-gray-300 flex-shrink-0 fixed top-0 z-30 left-0 right-0 bg-white w-screen">
         <NavigationMenu>
           <NavigationMenuList className="flex uppercase gap-7 list-none w-full">
             <NavigationMenuItem>

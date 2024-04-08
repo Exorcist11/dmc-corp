@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SlMagnifier, SlDoc, SlEqualizer } from "react-icons/sl";
+import { GoPlus } from "react-icons/go";
 
 import {
   DropdownMenu,
@@ -10,6 +11,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+import { useNavigate } from "react-router-dom";
 
 // import {
 //   Pagination,
@@ -26,6 +29,7 @@ export default function ListProduct() {
   useEffect(() => {
     document.title = "Danh sách sản phẩm";
   });
+  const navigate = useNavigate();
   return (
     <div className="h-full flex flex-col gap-5 py-8">
       <div className="flex flex-col gap-3 px-10 ">
@@ -33,12 +37,23 @@ export default function ListProduct() {
         <div className="flex items-center justify-between gap-4">
           <Input icon={<SlMagnifier />} placeholder="Tìm kiếm sản phẩm" />
 
-          <Button className="bg-gray-500">
-            <SlDoc size={18} color="white" />{" "}
-            <label htmlFor="newRole" className="ml-1">
-              Export
-            </label>
-          </Button>
+          <div className="flex items-center gap-4">
+            <Button className="bg-gray-500">
+              <SlDoc size={18} color="white" />{" "}
+              <label htmlFor="newRole" className="ml-1">
+                Export
+              </label>
+            </Button>
+            <Button
+              className="bg-[#3874FF] font-semibold hover:bg-[#004dff]"
+              onClick={() => navigate("/dashboard/new-product")}
+            >
+              <GoPlus size={18} color="white" />{" "}
+              <label htmlFor="newRole" className="ml-1">
+                Thêm mới sản phẩm
+              </label>
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -86,7 +101,11 @@ export default function ListProduct() {
                   <DropdownMenuContent>
                     <DropdownMenuLabel>Settings</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Chi tiết sản phẩm</DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => navigate("/dashboard/rings/info")}
+                    >
+                      Chi tiết sản phẩm
+                    </DropdownMenuItem>
                     <DropdownMenuItem>Xoá</DropdownMenuItem>
                     <DropdownMenuItem>Xuất dữ liệu</DropdownMenuItem>
                   </DropdownMenuContent>

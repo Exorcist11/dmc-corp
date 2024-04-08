@@ -1,16 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { LiaShippingFastSolid } from "react-icons/lia";
-import { SlLink } from "react-icons/sl";
 import { PiShieldCheckLight } from "react-icons/pi";
 import { MdCurrencyExchange } from "react-icons/md";
+import { SlLink } from "react-icons/sl";
+
 import SliderProduct from "@/components/Slider/SliderProduct";
+import { useNavigate } from "react-router-dom";
 
 export default function Homepage() {
+  const navigate = useNavigate();
   const menuCategory = [
     {
       name: "Đồng hồ",
       linkImg: "https://curnonwatch.com/wp-content/uploads/2024/03/1-1.jpg",
-      navTo: "",
+      navTo: "/product/watch",
     },
     {
       name: "Vòng tay",
@@ -61,6 +64,7 @@ export default function Homepage() {
       <div className="grid grid-cols-5 h-80">
         {menuCategory?.map((item, index) => (
           <div
+            onClick={() => navigate(`${item?.navTo}`)}
             key={index}
             className="flex flex-col gap-2 p-15 border justify-center items-center cursor-pointer transition ease-in-out duration-500 h-full"
           >
@@ -146,10 +150,22 @@ export default function Homepage() {
 
       <div className="grid grid-cols-2">
         <div className="grid grid-cols-2 bottom-[1px]">
-          <img src="https://curnonwatch.com/wp-content/uploads/2024/02/Everly-white-silver-2-1.jpg" alt="" />
-          <img src="https://curnonwatch.com/wp-content/uploads/2024/02/Ellen-SIDE4363.png" alt="" />
-          <img src="https://curnonwatch.com/wp-content/uploads/2024/02/Eleni4563773.png" alt="" />
-          <img src="https://curnonwatch.com/wp-content/uploads/2024/02/T2-6-min.76545.png" alt="" />
+          <img
+            src="https://curnonwatch.com/wp-content/uploads/2024/02/Everly-white-silver-2-1.jpg"
+            alt=""
+          />
+          <img
+            src="https://curnonwatch.com/wp-content/uploads/2024/02/Ellen-SIDE4363.png"
+            alt=""
+          />
+          <img
+            src="https://curnonwatch.com/wp-content/uploads/2024/02/Eleni4563773.png"
+            alt=""
+          />
+          <img
+            src="https://curnonwatch.com/wp-content/uploads/2024/02/T2-6-min.76545.png"
+            alt=""
+          />
         </div>
         <img
           src="https://curnonwatch.com/wp-content/uploads/2024/01/ANN9861-scaled-e1705394776499.jpg"

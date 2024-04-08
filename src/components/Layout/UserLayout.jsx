@@ -63,8 +63,8 @@ export default function UserLayout({ children }) {
               <div
                 className="flex gap-3 items-center cursor-pointer hover:bg-[#edf1f5] px-6 py-3"
                 onClick={() => {
-                  localStorage.clear(); 
-                  window.location.href = "/"; 
+                  localStorage.clear();
+                  window.location.href = "/";
                 }}
               >
                 <SlLogout />
