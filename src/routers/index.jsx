@@ -18,8 +18,8 @@ const publicRoute = [
   { path: "/", page: Homepage },
   { path: "/register", page: RegisterPage },
   { path: "/forget", page: ForgetPasswordPage },
-  { path: "/product/watch", page: ProductCategory },
-  { path: "/product/detail", page: ProductDetail },
+  { path: "/product/:path", page: ProductCategory },
+  { path: "/:path_product", page: ProductDetail },
   // { path: "/account", page: UserPage },
 ];
 

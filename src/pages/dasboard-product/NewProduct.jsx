@@ -20,7 +20,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function NewProduct() {
-  const formData = new FormData();
   const [images, setImages] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -120,27 +119,35 @@ export default function NewProduct() {
   };
 
   const handleSubmit = async () => {
-    await axios
-      .post("http://127.0.0.1:9999/product", dataSend)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((e) => console.log(e));
+    try {
+      const productResponse = await axios.post(
+        "http://127.0.0.1:9999/product",
+        dataSend
+      );
+      console.log(productResponse.data);
 
-    formData.append("product_id", input?.product_id);
-    for (let i = 0; i < selectedFiles.length; i++) {
-      formData.append("images", selectedFiles[i]);
-    }
+      if (productResponse.status === 200 && selectedFiles.length > 0) {
+        const formData = new FormData();
+        formData.append("product_id", productResponse.data.product_id);
 
-    if (selectedFiles) {
-      await axios
-        .post("http://127.0.0.1:9999/upload-images", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
+        for (let i = 0; i < selectedFiles.length; i++) {
+          formData.append("images", selectedFiles[i]);
+        }
+
+        const imageResponse = await axios.post(
+          "http://127.0.0.1:9999/upload-images",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        console.log(imageResponse.data);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 

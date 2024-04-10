@@ -35,7 +35,7 @@ export default function InfoProduct() {
   const [input, setInput] = useState();
   const [description, setDescription] = useState({ text: "", html: "" });
   const navigate = useNavigate();
-
+ const mdParser = new MarkdownIt(/* Markdown-it options */);
   const dataSend = {
     product_id: input?.product_id,
     product_name: input?.product_name,
@@ -96,7 +96,7 @@ export default function InfoProduct() {
     getSeller();
   }, []);
 
-  const mdParser = new MarkdownIt(/* Markdown-it options */);
+ 
 
   function handleEditorChange({ html, text }) {
     console.log("handleEditorChange: ", html, text);

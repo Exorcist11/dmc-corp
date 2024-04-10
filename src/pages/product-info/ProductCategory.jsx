@@ -16,7 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
+import axios from "axios";
 import {
   Pagination,
   PaginationContent,
@@ -26,8 +26,30 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useEffect } from "react";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function ProductCategory() {
+  const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
+  const { path } = useParams();
+  useEffect(() => {
+    document.title = "Danh sách sản phẩm - DMC-Corp";
+  });
+
+  useEffect(() => {
+    const getCategory = async () => {
+      if (path) {
+        axios
+          .get(`http://127.0.0.1:9999/product_by_category/${path}`)
+          .then((res) => setProducts(res.data.category_name))
+          .catch((err) => console.log(err));
+      }
+    };
+    getCategory();
+  }, [path]);
+ 
   return (
     <div className="flex flex-col">
       <img
@@ -104,52 +126,25 @@ export default function ProductCategory() {
           </div>
 
           <div className="grid grid-cols-4 gap-2 justify-center">
-            <div className="flex flex-col gap-2">
-              <img
-                src="https://curnonwatch.com/wp-content/uploads/2024/02/1_Brown4.876543.png"
-                alt=""
-                className="object-cover object-center h-[360px]"
-              />
-              <h1 className="font-semibold">Range</h1>
-              <h1 className="">1.888.888 VND</h1>
-            </div>
-            <div className="flex flex-col gap-2">
-              <img
-                src="https://curnonwatch.com/wp-content/uploads/2024/02/1_Brown4.876543.png"
-                alt=""
-                className="object-cover object-center h-[360px]"
-              />
-              <h1 className="font-semibold">Range</h1>
-              <h1 className="">1.888.888 VND</h1>
-            </div>
-            <div className="flex flex-col gap-2">
-              <img
-                src="https://curnonwatch.com/wp-content/uploads/2024/02/1_Brown4.876543.png"
-                alt=""
-                className="object-cover object-center h-[360px]"
-              />
-              <h1 className="font-semibold">Range</h1>
-              <h1 className="">1.888.888 VND</h1>
-            </div>
-            <div className="flex flex-col gap-2">
-              <img
-                src="https://curnonwatch.com/wp-content/uploads/2024/02/1_Brown4.876543.png"
-                alt=""
-                className="object-cover object-center h-[360px]"
-              />
-              <h1 className="font-semibold text-sm">Range</h1>
-              <h1 className="text-sm">1.888.888 VND</h1>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <img
-                src="https://curnonwatch.com/wp-content/uploads/2024/02/1_Brown4.876543.png"
-                alt=""
-                className="object-cover object-center h-[360px]"
-              />
-              <h1 className="font-semibold text-sm">Range</h1>
-              <h1 className="text-sm">1.888.888 VND</h1>
-            </div>
+            {products.map((item, index) => (
+              <div
+                className="flex flex-col gap-2 cursor-pointer"
+                key={index}
+                onClick={() => navigate(`/${item?.path_product}`)}
+              >
+                <img
+                  src={
+                    item.images
+                      ? item?.images
+                      : "https://curnonwatch.com/wp-content/uploads/2024/02/1_Brown4.876543.png"
+                  }
+                  alt=""
+                  className="object-cover object-center h-[360px]"
+                />
+                <h1 className="font-semibold">{item?.product_name}</h1>
+                <h1 className="">{item?.price} VND</h1>
+              </div>
+            ))}
           </div>
 
           <Pagination>

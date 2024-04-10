@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Ratings } from "@/components/ui/rating";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { SlHeart } from "react-icons/sl";
 import { LiaShippingFastSolid } from "react-icons/lia";
 import { PiShieldCheckLight } from "react-icons/pi";
@@ -27,14 +27,34 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import * as React from "react";
 import Autoplay from "embla-carousel-autoplay";
 import { LiaCartPlusSolid } from "react-icons/lia";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 export default function ProductDetail() {
+  const [product, setProduct] = useState([]);
   useEffect(() => {
     document.title = "Rise - Cửa hàng trang sức DMC-Group";
   });
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true })
   );
+
+  const { path_product } = useParams();
+
+  useEffect(() => {
+    const getInfo = async () => {
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:9999/product_by_path/${path_product}`
+        );
+        setProduct(response.data.record);
+        console.log(response.data.record);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getInfo();
+  }, [path_product]);
   return (
     <div className="flex flex-col">
       <div className="px-10 py-5">
@@ -45,62 +65,51 @@ export default function ProductDetail() {
             </BreadcrumbItem>
             <BreadcrumbSeparator>/</BreadcrumbSeparator>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/components">Components</BreadcrumbLink>
+              <BreadcrumbLink href="/components">
+                {product?.category}
+              </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator>/</BreadcrumbSeparator>
             <BreadcrumbItem>
-              <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+              <BreadcrumbPage>{product?.product_name}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
       </div>
 
       <div className="grid grid-cols-2 px-10 gap-3 mb-5">
-        <div className="col-span-1 grid grid-cols-2 gap-4">
-          <img
-            src="https://curnonwatch.com/wp-content/uploads/2024/02/G.Rise1111.png"
-            alt=""
-            className="object-cover object-center"
-          />
-          <img
-            src="https://curnonwatch.com/wp-content/uploads/2024/02/ANN_8626-e1708398277706.jpg"
-            alt=""
-            className="object-cover object-center"
-          />
-          <img
-            src="https://curnonwatch.com/wp-content/uploads/2024/02/ANN_8626-e1708398277706.jpg"
-            alt=""
-            className="object-cover object-center"
-          />
-          <img
-            src="https://curnonwatch.com/wp-content/uploads/2024/02/ANN_8626-e1708398277706.jpg"
-            alt=""
-            className="object-cover object-center"
-          />
-          <img
-            src="https://curnonwatch.com/wp-content/uploads/2024/02/ANN_8626-e1708398277706.jpg"
-            alt=""
-            className="object-cover object-center"
-          />
-          <img
-            src="https://curnonwatch.com/wp-content/uploads/2024/02/ANN_8626-e1708398277706.jpg"
-            alt=""
-            className="object-cover object-center"
-          />
+        <div className="col-span-1 grid grid-cols-2 gap-4 grid-rows-3">
+          {product.images ? (
+            product.images.map((item, index) => (
+              <img
+                key={index}
+                src={item}
+                alt=""
+                className="object-cover object-center h-full border"
+              />
+            ))
+          ) : (
+            <img
+              src="https://curnonwatch.com/wp-content/uploads/2024/02/G.Rise1111.png"
+              alt=""
+              className="object-cover object-center h-full"
+            />
+          )}
         </div>
 
         <div className="row-span-1 px-10 flex flex-col gap-3">
           <div className="border-b pb-3 gap-2 flex flex-col">
-            <h1 className="text-7xl font-bold">Rise</h1>
+            <h1 className="text-[#807da2]">{product?.category}</h1>
+            <h1 className="text-6xl font-bold">{product?.product_name}</h1>
             <div className="flex gap-2 items-center">
               <Ratings
-                rating={4.5}
+                rating={product?.rate ? product.rate : 0}
                 totalstars={5}
                 size={14}
                 fill={true.toString()}
                 variant="default"
               />
-              <h1>4.5</h1>
+              <h1>{product?.rate}</h1>
               <h1
                 className="text-[#908fa4] text-sm underline cursor-pointer"
                 onClick={() => {
@@ -117,7 +126,7 @@ export default function ProductDetail() {
                 See review
               </h1>
             </div>
-            <h1>2.123.456 VND</h1>
+            <h1>{product?.price} VND</h1>
           </div>
 
           <div className="border-b pb-3 gap-4 flex flex-col">
@@ -179,11 +188,7 @@ export default function ProductDetail() {
             <h1 className="uppercase font-semibold">Thông tin chi tiết</h1>
           </div>
           <div className="border-b pb-3 gap-2 flex flex-col py-4 justify-center items-center text-sm ">
-            <p>
-              Đồng hồ nam Curnon Kashmir Rise mang vẻ đẹp cuốn hút, mạnh mẽ, đầy
-              nam tính của người đàn ông; Dây kim loại, Mặt kính Sapphire chống
-              trầy xước, Chống nước 3ATM…
-            </p>
+            <React.Fragment>{product?.description_display}</React.Fragment>
           </div>
           <Tabs defaultValue="shipping" className="w-full mb-5">
             <div className="border-b gap-2 flex flex-col">

@@ -13,28 +13,28 @@ export default function Homepage() {
     {
       name: "Đồng hồ",
       linkImg: "https://curnonwatch.com/wp-content/uploads/2024/03/1-1.jpg",
-      navTo: "/product/watch",
+      navTo: "dong-ho",
     },
     {
       name: "Vòng tay",
       linkImg:
         "https://curnonwatch.com/wp-content/uploads/2024/03/Vo%CC%80ng-tay-1.png",
-      navTo: "",
+      navTo: "vong-tay",
     },
     {
       name: "Dây chuyền",
       linkImg: "https://curnonwatch.com/wp-content/uploads/2024/03/4.png",
-      navTo: "",
+      navTo: "day-chuyen",
     },
     {
       name: "Nhẫn",
       linkImg: "https://curnonwatch.com/wp-content/uploads/2024/03/5.png",
-      navTo: "",
+      navTo: "nhan",
     },
     {
       name: "Quà tặng",
       linkImg: "https://curnonwatch.com/wp-content/uploads/2024/03/6.png",
-      navTo: "",
+      navTo: "qua-tang",
     },
   ];
 
@@ -64,7 +64,7 @@ export default function Homepage() {
       <div className="grid grid-cols-5 h-80">
         {menuCategory?.map((item, index) => (
           <div
-            onClick={() => navigate(`${item?.navTo}`)}
+            onClick={() => navigate(`/product/${item?.navTo}`)}
             key={index}
             className="flex flex-col gap-2 p-15 border justify-center items-center cursor-pointer transition ease-in-out duration-500 h-full"
           >
