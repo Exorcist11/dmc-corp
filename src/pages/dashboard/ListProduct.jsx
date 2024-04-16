@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 // import {
 //   Pagination,
@@ -23,13 +23,34 @@ import { useNavigate } from "react-router-dom";
 //   PaginationNext,
 //   PaginationPrevious,
 // } from "@/components/ui/pagination";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function ListProduct() {
+  const [products, setProducts] = useState([]);
   useEffect(() => {
     document.title = "Danh sách sản phẩm";
   });
+
   const navigate = useNavigate();
+  const { path } = useParams();
+
+  useEffect(() => {
+    const getListProducts = async () => {
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:9999/product_by_category/${path}`
+        );
+        if (response.data.status) {
+          setProducts(response.data.record);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getListProducts();
+  }, [path]);
+
   return (
     <div className="h-full flex flex-col gap-5 py-8">
       <div className="flex flex-col gap-3 px-10 ">
@@ -79,39 +100,50 @@ export default function ListProduct() {
             </tr>
           </thead>
           <tbody>
-            <tr className="bg-white dark:bg-gray-800 dark:border-gray-700 border-b-[1px]">
-              <td className="py-4 px-6">
-                <input type="checkbox" />
-              </td>
-              <td className="py-4 px-6">
-                <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRUjWDMg9r9fOkOFket-YHclTjXpZg834-rU_H2p60HA&s"
-                  className="h-20 w-20 object-cover object-center rounded-xl"
-                />
-              </td>
-              <td className="py-4 px-6">Nhẫn vip pro</td>
-              <td className="py-4 px-6">100</td>
-              <td className="py-4 px-6">$4,500.00</td>
-              <td className="py-4 px-6">4.9</td>
-              <td className="py-4 px-6">
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <SlEqualizer />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuLabel>Settings</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      onClick={() => navigate("/dashboard/rings/info")}
-                    >
-                      Chi tiết sản phẩm
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>Xoá</DropdownMenuItem>
-                    <DropdownMenuItem>Xuất dữ liệu</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </td>
-            </tr>
+            {products?.map((item, index) => (
+              <tr
+                className="bg-white dark:bg-gray-800 dark:border-gray-700 border-b-[1px]"
+                key={index}
+              >
+                <td className="py-4 px-6">
+                  <input type="checkbox" />
+                </td>
+                <td className="py-4 px-6">
+                  <img
+                    src={
+                      item?.images
+                        ? item?.images
+                        : "/public/Image_not_available.png"
+                    }
+                    className="h-20 w-20 object-cover object-center rounded-xl"
+                  />
+                </td>
+                <td className="py-4 px-6">{item?.product_name}</td>
+                <td className="py-4 px-6">{item?.amount}</td>
+                <td className="py-4 px-6">$ {item?.price}</td>
+                <td className="py-4 px-6">{item?.rate}</td>
+                <td className="py-4 px-6">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <SlEqualizer />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuLabel>Settings</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        onClick={() =>
+                          navigate(`/dashboard/${path}/${item?.product_id}`)
+                        }
+                      >
+                        Chi tiết sản phẩm
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>Xoá</DropdownMenuItem>
+                      <DropdownMenuItem>Xuất dữ liệu</DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

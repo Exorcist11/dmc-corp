@@ -48,7 +48,6 @@ export default function ProductDetail() {
           `http://127.0.0.1:9999/product_by_path/${path_product}`
         );
         setProduct(response.data.record);
-        console.log(response.data.record);
       } catch (error) {
         console.log(error);
       }

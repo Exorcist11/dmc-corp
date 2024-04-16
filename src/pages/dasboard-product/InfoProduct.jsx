@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+
 import { SlCloudUpload } from "react-icons/sl";
 import { IoClose } from "react-icons/io5";
 
@@ -18,14 +19,16 @@ import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function InfoProduct() {
   const formData = new FormData();
+  const { product_id, path } = useParams();
   const [images, setImages] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [categories, setCategories] = useState([]);
   const [seller, setSeller] = useState([]);
+  const [product, setProduct] = useState([]);
   const [categoryID, setCategoryID] = useState("");
   const [sellerID, setSellerID] = useState("");
   const [size, setSize] = useState("");
@@ -35,7 +38,7 @@ export default function InfoProduct() {
   const [input, setInput] = useState();
   const [description, setDescription] = useState({ text: "", html: "" });
   const navigate = useNavigate();
- const mdParser = new MarkdownIt(/* Markdown-it options */);
+  const mdParser = new MarkdownIt(/* Markdown-it options */);
   const dataSend = {
     product_id: input?.product_id,
     product_name: input?.product_name,
@@ -73,6 +76,22 @@ export default function InfoProduct() {
   };
 
   useEffect(() => {
+    const getInfoProduct = async () => {
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:9999/settings_product/${product_id}`
+        );
+        if (response.status === 200) {
+          setProduct(response.data.product);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getInfoProduct();
+  }, []);
+
+  useEffect(() => {
     const getCategories = async () => {
       await axios
         .get("http://127.0.0.1:9999/categories")
@@ -95,8 +114,6 @@ export default function InfoProduct() {
     };
     getSeller();
   }, []);
-
- 
 
   function handleEditorChange({ html, text }) {
     console.log("handleEditorChange: ", html, text);
@@ -148,6 +165,7 @@ export default function InfoProduct() {
 
   return (
     <div className="h-full flex flex-col gap-2 px-10 py-8">
+      
       <div className=" flex flex-col gap-3">
         <h1 className="font-bold text-3xl">Thông tin sản phẩm</h1>
 
@@ -159,7 +177,7 @@ export default function InfoProduct() {
             <Button
               variant="secondary"
               className="border-[1px] text-black font-semibold hover:bg-[#e3e6ed]"
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate(`/dashboard/${path}`)}
             >
               Trở về trang quản trị
             </Button>
@@ -180,7 +198,9 @@ export default function InfoProduct() {
             <Input
               placeholder="Mã sản phẩm"
               name="product_id"
-              onChange={handleChange}
+              value={product?.product_id}
+              readonly
+              
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -188,6 +208,7 @@ export default function InfoProduct() {
             <Input
               placeholder="Tên sản phẩm"
               name="product_name"
+              value={product?.product_name}
               onChange={handleChange}
             />
           </div>
@@ -199,6 +220,7 @@ export default function InfoProduct() {
                 placeholder="$$$"
                 type="number"
                 name="price"
+                value={product?.price}
                 onChange={handleChange}
               />
             </div>
@@ -208,6 +230,7 @@ export default function InfoProduct() {
                 placeholder="Số lượng"
                 type="number"
                 name="amount"
+                value={product?.amount}
                 onChange={handleChange}
               />
             </div>
@@ -219,6 +242,7 @@ export default function InfoProduct() {
               style={{ height: "400px" }}
               renderHTML={(text) => mdParser.render(text)}
               onChange={handleEditorChange}
+          
             />
           </div>
 
@@ -264,8 +288,10 @@ export default function InfoProduct() {
         <div className="col-span-2 flex flex-col gap-3 mt-4">
           <div className="border-[1px]  flex flex-col justify-center bg-white rounded-lg">
             <img
-              src="https://phoenix-react.prium.me/static/media/3.d762762aae46b7628525.png"
-              alt=""
+              src={
+                product.images ? product.images[0] : "/Image_not_available.png"
+              }
+              alt={product?.product_name}
               className="object-cover object-center "
             />
           </div>

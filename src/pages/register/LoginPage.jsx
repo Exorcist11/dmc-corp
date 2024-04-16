@@ -13,7 +13,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   const [account, setAccount] = useState();
-  const [errors, setErrors] = useState([]);
+  const [errors, setErrors] = useState();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,25 +24,31 @@ export default function LoginPage() {
   };
 
   const handleSubmit = async () => {
-    let errs = [];
-
-    if (!account?.username) {
-      errs.push("Tài khoản không được để trống!");
-    } else if (!account?.password) {
-      errs.push("Mật khẩu không được để trống!");
+    try {
+      if (account?.username && account?.password) {
+        const response = await axios.post(
+          "http://127.0.0.1:9999/login",
+          account
+        );
+        if (response.data.status === 200) {
+          localStorage.setItem("user_id", response?.data.info.account_id);
+          localStorage.setItem("user_name", response?.data.info.username);
+          navigate("/");
+        } else {
+          setErrors(response.data.message);
+        }
+      } else {
+        setErrors('Vui lòng nhập đầy đủ tài khoản và mật khẩu!')
+      }
+    } catch (error) {
+      if (error.request.status === 401) {
+        setErrors("Sai mật khẩu!");
+      } else if (error.request.status === 404) {
+        setErrors("Tài khoản không tồn tại!");
+      } else {
+        setErrors("Lỗi kêt nối!");
+      }
     }
-
-    await axios
-      .post("http://127.0.0.1:9999/login", account)
-      .then((res) => {
-        localStorage.setItem("user_id", res?.data.info.account_id);
-        localStorage.setItem("user_name", res?.data.info.username);
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    setErrors(errs);
   };
 
   return (
@@ -86,13 +92,15 @@ export default function LoginPage() {
         >
           Quay lại cửa hàng
         </h1>
-        {errors?.map((error) => (
-          <Alert variant="destructive" key={error}>
+        {errors ? (
+          <Alert variant="destructive" key={errors}>
             <SlBan />
             <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
+            <AlertDescription>{errors}</AlertDescription>
           </Alert>
-        ))}
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

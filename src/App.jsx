@@ -4,13 +4,11 @@ import { Fragment } from "react";
 import ClientLayout from "./components/Layout/ClientLayout";
 import UserLayout from "./components/Layout/UserLayout";
 import Dashboard from "./components/Layout/Dashboard";
-
-
+import Page404 from "./pages/page-404/Page404";
 
 function App() {
   return (
     <div>
-      
       <Routes>
         {publicRoute.map((route, index) => {
           const Layout = route.layout === null ? Fragment : ClientLayout;
@@ -49,7 +47,7 @@ function App() {
           return (
             <Route
               key={index}
-              path={route?.path}
+              path={route?.path ? route?.path : "*"}
               element={
                 <Layout>
                   <Page />
@@ -58,8 +56,9 @@ function App() {
             />
           );
         })}
+
+        <Route path="/err" element={<Page404 />} />
       </Routes>
-      
     </div>
   );
 }

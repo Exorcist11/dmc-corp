@@ -12,6 +12,7 @@ import ListProduct from "@/pages/dashboard/ListProduct";
 import InfoProduct from "@/pages/dasboard-product/InfoProduct";
 import ProductCategory from "@/pages/product-info/ProductCategory";
 import ProductDetail from "@/pages/product-info/ProductDetail";
+import Page404 from "@/pages/page-404/Page404";
 
 const publicRoute = [
   { path: "/login", page: LoginPage },
@@ -20,6 +21,7 @@ const publicRoute = [
   { path: "/forget", page: ForgetPasswordPage },
   { path: "/product/:path", page: ProductCategory },
   { path: "/:path_product", page: ProductDetail },
+  { path: "/error", page: Page404 },
   // { path: "/account", page: UserPage },
 ];
 
@@ -33,7 +35,7 @@ const adminRoute = [
   { path: "/role", page: RolePage },
   { path: "/customers/:role", page: Customers },
   { path: "/dashboard/new-product", page: NewProduct },
-  { path: "/dashboard/rings", page: ListProduct },
-  { path: "/dashboard/rings/info", page: InfoProduct, layout: null },
+  { path: "/dashboard/:path", page: ListProduct },
+  { path: "/dashboard/:path/:product_id", page: InfoProduct, layout: null },
 ];
 export { publicRoute, accountRoute, adminRoute };

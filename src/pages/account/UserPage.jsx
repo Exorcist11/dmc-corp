@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import { SlCalender } from "react-icons/sl";
+import { SlCalender, SlCheck } from "react-icons/sl";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -10,35 +10,100 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function UserPage() {
   useEffect(() => {
     document.title = "Thông tin cá nhân";
   });
+  const { toast } = useToast();
+  const navigate = useNavigate();
   const [date, setDate] = useState("");
-  
+  const [data, setData] = useState({
+    full_name: "",
+    phone_number: "",
+    email: "",
+  });
+  const handleInput = (event) => {
+    setData({ ...data, [event.target.name]: event.target.value });
+  };
+  console.log(date)
+  useEffect(() => {
+    const getInfomation = async () => {
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:9999/settings/${localStorage.getItem("user_id")}`
+        );
+        setData(response.data.infor);
+      } catch (error) {
+        navigate("/error");
+        console.log(error);
+      }
+    };
+    getInfomation();
+  }, []);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    await axios
+      .patch(
+        `http://127.0.0.1:9999/settings/${localStorage.getItem("user_id")}`,
+        data
+      )
+      .then(() =>
+        toast({
+          action: (
+            <div className="w-full flex items-center gap-3">
+              <SlCheck /> <span>Cập nhật thông tin thành công!</span>
+            </div>
+          ),
+        })
+      )
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div className="flex flex-col gap-3">
       <h1 className="font-semibold text-xl">Thông tin cá nhân</h1>
 
       <div className="flex flex-col gap-1">
         <h1 className="text-sm font-semibold">Tài khoản</h1>
-        <Input className="" disabled value={localStorage.getItem('user_name')} />
+        <Input
+          className=""
+          readOnly={true}
+          value={localStorage.getItem("user_name")}
+        />
       </div>
 
       <div className="flex flex-col gap-1">
         <h1 className="text-sm font-semibold">Họ tên</h1>
-        <Input className="" />
+        <Input
+          className=""
+          onChange={handleInput}
+          name="full_name"
+          value={data?.full_name}
+        />
       </div>
 
       <div className="flex flex-col gap-1">
         <h1 className="text-sm font-semibold">Số điện thoại</h1>
-        <Input className="" />
+        <Input
+          className=""
+          onChange={handleInput}
+          name="phone_number"
+          defaultValue={data?.phone_number}
+        />
       </div>
 
       <div className="flex flex-col gap-1">
         <h1 className="text-sm font-semibold">Email</h1>
-        <Input className="" />
+        <Input
+          className=""
+          onChange={handleInput}
+          name="email"
+          defaultValue={data?.email}
+        />
       </div>
 
       <div className="flex flex-col gap-1">
@@ -67,7 +132,9 @@ export default function UserPage() {
         </Popover>
       </div>
 
-      <Button className="h-12">Lưu thay đổi</Button>
+      <Button className="" onClick={handleSubmit}>
+        Lưu thay đổi
+      </Button>
     </div>
   );
 }

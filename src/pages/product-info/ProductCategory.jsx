@@ -43,7 +43,7 @@ export default function ProductCategory() {
       if (path) {
         axios
           .get(`http://127.0.0.1:9999/product_by_category/${path}`)
-          .then((res) => setProducts(res.data.category_name))
+          .then((res) => setProducts(res.data.record))
           .catch((err) => console.log(err));
       }
     };

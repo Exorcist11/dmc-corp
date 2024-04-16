@@ -10,6 +10,7 @@ import {
   SlTag,
 } from "react-icons/sl";
 import React from "react";
+import { Toaster } from '@/components/ui/toaster';
 
 export default function UserLayout({ children }) {
   const items = [
@@ -75,6 +76,7 @@ export default function UserLayout({ children }) {
 
           <div className="bg-[#ffffff] w-2/3 rounded-lg border-[1px] p-4">
             {children}
+            <Toaster />
           </div>
         </div>
       </div>

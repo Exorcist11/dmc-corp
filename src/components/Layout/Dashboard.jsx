@@ -67,11 +67,11 @@ export default function Dashboard({ children }) {
       icon: <SlDiamond />,
       action: [
         { name: "Thêm mới sản phẩm", link: "/dashboard/new-product" },
-        { name: "Nhẫn", link: "/dashboard/rings" },
-        { name: "Đồng hồ", link: "/watchs" },
-        { name: "Vòng tay", link: "/necklaces" },
-        { name: "Dây chuyền", link: "/watchs" },
-        { name: "Quà tặng", link: "/necklaces" },
+        { name: "Nhẫn", link: "/dashboard/nhan" },
+        { name: "Đồng hồ", link: "/dashboard/dong-ho" },
+        { name: "Vòng tay", link: "/dashboard/vong-tay" },
+        { name: "Dây chuyền", link: "/dashboard/day-chuyen" },
+        { name: "Quà tặng", link: "/dashboard/qua-tang" },
       ],
     },
     { name: "Đơn hàng", icon: <SlDrawer /> },
@@ -86,7 +86,7 @@ export default function Dashboard({ children }) {
         <div>Avatar</div>
       </div>
       <div className="flex mt-16 ">
-        <div className=" fixed w-1/6 h-full flex  flex-col bg-white border-r shadow-sm">
+        <div className=" fixed w-1/6 h-full flex flex-col bg-white border-r shadow-sm">
           <div className="flex flex-col">
             <div
               className="flex items-center gap-3 p-4 text-sm font-medium"
@@ -138,6 +138,7 @@ export default function Dashboard({ children }) {
                     {item.icon}
                     <h1>{item.name}</h1>
                   </div>
+
                   {selectedAppMenu === index &&
                     item.action &&
                     item.action.map((item_action, index_action) => (
