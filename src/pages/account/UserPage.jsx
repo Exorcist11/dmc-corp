@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/popover";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+
 import { useToast } from "@/components/ui/use-toast";
 
 export default function UserPage() {
@@ -19,7 +19,7 @@ export default function UserPage() {
     document.title = "Thông tin cá nhân";
   });
   const { toast } = useToast();
-  const navigate = useNavigate();
+
   const [date, setDate] = useState("");
   const [data, setData] = useState({
     full_name: "",
@@ -29,7 +29,7 @@ export default function UserPage() {
   const handleInput = (event) => {
     setData({ ...data, [event.target.name]: event.target.value });
   };
-  console.log(date)
+
   useEffect(() => {
     const getInfomation = async () => {
       try {
@@ -38,12 +38,14 @@ export default function UserPage() {
         );
         setData(response.data.infor);
       } catch (error) {
-        navigate("/error");
+     
         console.log(error);
       }
     };
     getInfomation();
   }, []);
+
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     await axios

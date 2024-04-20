@@ -1,15 +1,7 @@
 import { SlUser, SlBag, SlMagnifier } from "react-icons/sl";
+
 import { useNavigate } from "react-router-dom";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 import {
   NavigationMenu,
@@ -20,12 +12,14 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { Button } from "@/components/ui/button";
+
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+
+import Cart from "../Cart/Cart";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -96,19 +90,8 @@ export default function Header() {
         </div>
       </div>
 
-      <SheetContent>
-        <SheetHeader>
-          <SheetTitle>Giỏ hàng</SheetTitle>
-          <SheetDescription>
-            Make changes to your profile here. Click save when you're done.
-          </SheetDescription>
-        </SheetHeader>
-        <div>Content</div>
-        <SheetFooter>
-          <SheetClose asChild>
-            <Button type="submit">Save changes</Button>
-          </SheetClose>
-        </SheetFooter>
+      <SheetContent className="h-full flex flex-col justify-between">
+        <Cart />
       </SheetContent>
     </Sheet>
   );

@@ -32,7 +32,16 @@ import axios from "axios";
 export default function Customers() {
   const { role } = useParams();
   const [invoices, setInvoices] = useState([]);
-
+  const [person, setPerson] = useState({
+    user_name: "",
+    full_name: "",
+    email: "",
+    phone_number: "",
+    user_id: "",
+    date_of_birth: "",
+    address: [],
+  });
+  
   const getPerson = useCallback(async () => {
     await axios
       .get(`http://127.0.0.1:9999/role/${role}`)
@@ -42,8 +51,30 @@ export default function Customers() {
 
   useEffect(() => {
     document.title = role === "R1" ? "Customer" : "Administration";
+
     getPerson();
   }, [role, getPerson]);
+
+  // useEffect(() => {
+  //   const getPerson = async () => {
+  //     await axios
+  //       .get(`http://127.0.0.1:9999/role/${role}`)
+  //       .then((response) => setInvoices(response.data.users))
+  //       .catch((error) => console.log(error));
+  //   };
+  //   getPerson();
+  // }, []);
+
+  const handleView = async (id) => {
+    await axios
+      .get(`http://127.0.0.1:9999/settings/${id}`)
+      .then((res) => setPerson(res.data.infor))
+      .catch((err) => console.log(err));
+  };
+
+  const handleChange = (e) => {
+    setPerson({ ...person, [e.target.name]: e.target.value });
+  };
 
   return (
     <Dialog>
@@ -94,12 +125,15 @@ export default function Customers() {
                   <TableCell>{invoice?.email}</TableCell>
                   <TableCell>{invoice?.phone_number}</TableCell>
                   <TableCell className="text-right">
-                    <DialogTrigger asChild>
+                    <DialogTrigger
+                      onClick={() => handleView(invoice?.user_id)}
+                      asChild
+                    >
                       <label
                         htmlFor="update"
                         className="hover:font-medium cursor-pointer hover:underline"
                       >
-                        Update
+                        View profile
                       </label>
                     </DialogTrigger>{" "}
                     |{" "}
@@ -123,7 +157,7 @@ export default function Customers() {
         </div>
       </div>
 
-      <DialogContent className="sm:max-w-[425px] w-full">
+      <DialogContent className="sm:max-w-4xl w-full">
         <DialogHeader>
           <DialogTitle>Edit profile</DialogTitle>
           <DialogDescription>
@@ -133,16 +167,99 @@ export default function Customers() {
 
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right col-span-1">
-              Name
+            <Label htmlFor="user_id" className="text-left col-span-1">
+              User ID
             </Label>
-            <Input id="name" value="" className="col-span-3" />
+            <Input
+              id="user_id"
+              name="user_id"
+              value={person?.user_id}
+              className="col-span-3"
+              readOnly
+            />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
+            <Label htmlFor="username" className="text-left col-span-1">
               Username
             </Label>
-            <Input id="username" value="" className="col-span-3" />
+            <Input
+              id="username"
+              name="username"
+              value={person?.user_name}
+              className="col-span-3"
+              readOnly
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="full_name" className="text-left">
+              Full name
+            </Label>
+            <Input
+              id="full_name"
+              name="full_name"
+              defaultValue={person?.full_name}
+              className="col-span-3"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="phone_number" className="text-left">
+              Phone number
+            </Label>
+            <Input
+              id="phone_number"
+              name="phone_number"
+              defaultValue={person?.phone_number}
+              className="col-span-3"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="email" className="text-left">
+              Email
+            </Label>
+            <Input
+              id="email"
+              name="email"
+              defaultValue={person?.email}
+              className="col-span-3"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="date_of_birth" className="text-left">
+              Date of birth
+            </Label>
+            <Input
+              id="date_of_birth"
+              name="date_of_birth"
+              defaultValue={person?.date_of_birth}
+              className="col-span-3"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-center uppercase">
+              Danh sách địa chỉ
+            </div>
+            {person?.address.map((item, index) => (
+              <div key={index}>
+                <div
+                  className="border-[1px] p-4 rounded-lg text-sm flex flex-col gap-2"
+                  key={index}
+                >
+                  <div className="flex justify-between">
+                    <h1>
+                      {item?.full_name} | {item?.phone_number}
+                    </h1>
+                  </div>
+                  <div>{item?.note}</div>
+                  <div>
+                    {item?.ward} - {item?.district} - {item?.province}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 

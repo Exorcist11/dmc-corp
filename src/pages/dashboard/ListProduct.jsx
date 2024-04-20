@@ -118,9 +118,16 @@ export default function ListProduct() {
                     className="h-20 w-20 object-cover object-center rounded-xl"
                   />
                 </td>
-                <td className="py-4 px-6">{item?.product_name}</td>
+                <td
+                  className="py-4 px-6 cursor-pointer hover:text-blue-700"
+                  onClick={() => navigate(`/${item?.path_product}`)}
+                >
+                  {item?.product_name}
+                </td>
                 <td className="py-4 px-6">{item?.amount}</td>
-                <td className="py-4 px-6">$ {item?.price}</td>
+                <td className="py-4 px-6">
+                  $ {parseInt(item?.price).toLocaleString("vn-VN")}
+                </td>
                 <td className="py-4 px-6">{item?.rate}</td>
                 <td className="py-4 px-6">
                   <DropdownMenu>

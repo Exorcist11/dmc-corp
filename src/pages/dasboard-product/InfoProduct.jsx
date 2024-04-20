@@ -5,11 +5,9 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 
 import { SlCloudUpload } from "react-icons/sl";
 import { IoClose } from "react-icons/io5";
@@ -24,56 +22,37 @@ import { useNavigate, useParams } from "react-router-dom";
 export default function InfoProduct() {
   const formData = new FormData();
   const { product_id, path } = useParams();
-  const [images, setImages] = useState([]);
+
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [categories, setCategories] = useState([]);
   const [seller, setSeller] = useState([]);
-  const [product, setProduct] = useState([]);
-  const [categoryID, setCategoryID] = useState("");
-  const [sellerID, setSellerID] = useState("");
-  const [size, setSize] = useState("");
-  const [material, setMaterial] = useState("");
-  const [width, setWidth] = useState("");
-  const [color, setColor] = useState("");
-  const [input, setInput] = useState();
-  const [description, setDescription] = useState({ text: "", html: "" });
+
   const navigate = useNavigate();
   const mdParser = new MarkdownIt(/* Markdown-it options */);
-  const dataSend = {
-    product_id: input?.product_id,
-    product_name: input?.product_name,
-    seller: sellerID,
-    price: input?.price,
-    amount: input?.amount,
-    category_id: categoryID,
-    color: color,
-    material: material,
-    size: size,
-    width: width,
-    waterproof: input?.waterproof,
-    description_display: description.html,
-    description_markdown: description.text,
-  };
-  const sizes = {
-    1: ["24mm", "28mm", "32mm", "36mm", "40mm", "44mm", "48mm", "52mm", "56mm"],
-    2: ["5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"],
-    3: ["14", "15", "16", "17", "18"],
-    4: ["None"],
-    5: ["45", "46", "47", "48", "49", "50", "51", "52"],
+  const [product, setProduct] = useState({
+    product_id: "",
+    product_name: "",
+    seller: "",
+    category_id: "",
+    price: "",
+    amount: "",
+    color: "",
+    material: "",
+    size: "",
+    width: "",
+    waterproof: "",
+    description_display: "",
+    description_markdown: "",
+    images: [],
+  });
+
+  const handleInput = (event) => {
+    setProduct({ ...product, [event.target.name]: event.target.value });
   };
 
-  const sizeList = sizes[categoryID] || [];
   useEffect(() => {
     document.title = "Thông tin chi tiết";
   });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setInput((preState) => ({
-      ...preState,
-      [name]: value,
-    }));
-  };
 
   useEffect(() => {
     const getInfoProduct = async () => {
@@ -116,8 +95,12 @@ export default function InfoProduct() {
   }, []);
 
   function handleEditorChange({ html, text }) {
-    console.log("handleEditorChange: ", html, text);
-    setDescription({ text: text, html: html });
+    // console.log("handleEditorChange: ", html, text);
+    setProduct({
+      ...product,
+      description_markdown: text,
+      description_display: html,
+    });
   }
 
   const handleFiles = (event) => {
@@ -128,25 +111,31 @@ export default function InfoProduct() {
       const reader = new FileReader();
 
       reader.onload = function (event) {
-        setImages((prevImages) => [...prevImages, event.target.result]);
+        setProduct({
+          ...product,
+          images: (prevImages) => [...prevImages, event.target.result],
+        });
       };
       reader.readAsDataURL(file);
     }
   };
 
   const handleDelete = (index) => {
-    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+    setProduct({
+      ...product,
+      images: (prevImages) => prevImages.filter((_, i) => i !== index),
+    });
   };
 
   const handleSubmit = async () => {
-    await axios
-      .post("http://127.0.0.1:9999/product", dataSend)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((e) => console.log(e));
+    // await axios
+    //   .post("http://127.0.0.1:9999/product", dataSend)
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((e) => console.log(e));
 
-    formData.append("product_id", input?.product_id);
+    // formData.append("product_id", input?.product_id);
     for (let i = 0; i < selectedFiles.length; i++) {
       formData.append("images", selectedFiles[i]);
     }
@@ -165,7 +154,6 @@ export default function InfoProduct() {
 
   return (
     <div className="h-full flex flex-col gap-2 px-10 py-8">
-      
       <div className=" flex flex-col gap-3">
         <h1 className="font-bold text-3xl">Thông tin sản phẩm</h1>
 
@@ -199,8 +187,7 @@ export default function InfoProduct() {
               placeholder="Mã sản phẩm"
               name="product_id"
               value={product?.product_id}
-              readonly
-              
+              readOnly={true}
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -209,7 +196,7 @@ export default function InfoProduct() {
               placeholder="Tên sản phẩm"
               name="product_name"
               value={product?.product_name}
-              onChange={handleChange}
+              onChange={handleInput}
             />
           </div>
 
@@ -221,7 +208,7 @@ export default function InfoProduct() {
                 type="number"
                 name="price"
                 value={product?.price}
-                onChange={handleChange}
+                onChange={handleInput}
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -231,7 +218,7 @@ export default function InfoProduct() {
                 type="number"
                 name="amount"
                 value={product?.amount}
-                onChange={handleChange}
+                onChange={handleInput}
               />
             </div>
           </div>
@@ -242,14 +229,15 @@ export default function InfoProduct() {
               style={{ height: "400px" }}
               renderHTML={(text) => mdParser.render(text)}
               onChange={handleEditorChange}
-          
+              value={product.description_markdown}
+              
             />
           </div>
 
           <div className="flex flex-col gap-2">
             <h1 className="font-semibold text-lg">Hình ảnh hiển thị</h1>
             <div className="flex flex-wrap gap-3">
-              {images.map((image, index) => (
+              {product?.images.map((image, index) => (
                 <div key={index} className="relative">
                   <img
                     src={image}
@@ -299,7 +287,12 @@ export default function InfoProduct() {
             <h1 className="font-semibold text-xl py-4">Xuất xứ</h1>
             <div className="flex flex-col gap-2">
               <h1 className="font-bold text-sm">Loại sản phẩm</h1>
-              <Select onValueChange={(value) => setCategoryID(value)}>
+              <Select
+                onValueChange={(value) =>
+                  setProduct({ ...product, category_id: value })
+                }
+                defaultValue={product.category_id}
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Chọn loại sản phẩm" />
                 </SelectTrigger>
@@ -317,7 +310,12 @@ export default function InfoProduct() {
 
             <div className="flex flex-col gap-2">
               <h1 className="font-bold text-sm">Thương hiệu</h1>
-              <Select onValueChange={(value) => setSellerID(value)}>
+              <Select
+                onValueChange={(value) =>
+                  setProduct({ ...product, seller: value })
+                }
+                defaultValue={product.seller}
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Chọn thương hiệu" />
                 </SelectTrigger>
@@ -338,25 +336,17 @@ export default function InfoProduct() {
             <h1 className="font-semibold text-xl py-4">Chi tiết sản phẩm</h1>
             <div className="flex flex-col gap-2">
               <h1 className="font-bold text-sm">Kích thước</h1>
-              <Select onValueChange={(value) => setSize(value)}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Chọn kích cỡ sản phẩm" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {sizeList.map((size, index) => (
-                      <SelectItem key={index} value={size}>
-                        {size}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+              <Input value={product.size} onChange={handleInput} name="size" />
             </div>
 
             <div className="flex flex-col gap-2">
               <h1 className="font-bold text-sm">Chất liệu</h1>
-              <Select onValueChange={(value) => setMaterial(value)}>
+              <Select
+                onValueChange={(value) =>
+                  setProduct({ ...product, material: value })
+                }
+                defaultValue={product?.material}
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Chọn chất liệu sản phẩm" />
                 </SelectTrigger>
@@ -364,7 +354,8 @@ export default function InfoProduct() {
                   <SelectGroup>
                     <SelectItem value="gold">Vàng</SelectItem>
                     <SelectItem value="silver">Bạc</SelectItem>
-                    <SelectItem value="bronze">Đồng</SelectItem>
+                    <SelectItem value="titanium">Titanium</SelectItem>
+                    <SelectItem value="alloy">Hợp kim</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -372,26 +363,21 @@ export default function InfoProduct() {
 
             <div className="flex flex-col gap-2">
               <h1 className="font-bold text-sm">Chiều dài</h1>
-              <Select onValueChange={(value) => setWidth(value)}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Chọn chiều dài sản phẩm" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Fruits</SelectLabel>
-                    <SelectItem value="apple">Apple</SelectItem>
-                    <SelectItem value="banana">Banana</SelectItem>
-                    <SelectItem value="blueberry">Blueberry</SelectItem>
-                    <SelectItem value="grapes">Grapes</SelectItem>
-                    <SelectItem value="pineapple">Pineapple</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+              <Input
+                name="width"
+                value={product.width}
+                onChange={handleInput}
+              />
             </div>
 
             <div className="flex flex-col gap-2">
               <h1 className="font-bold text-sm">Màu sắc</h1>
-              <Select onValueChange={(value) => setColor(value)}>
+              <Select
+                onValueChange={(value) =>
+                  setProduct({ ...product, color: value })
+                }
+                defaultValue={product?.color}
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Chọn màu sắc sản phẩm" />
                 </SelectTrigger>
@@ -410,7 +396,8 @@ export default function InfoProduct() {
               <Input
                 placeholder="Chống nước"
                 name="waterproof"
-                onChange={handleChange}
+                value={product.waterproof}
+                onChange={handleInput}
               />
             </div>
           </div>

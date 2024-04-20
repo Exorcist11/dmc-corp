@@ -27,13 +27,17 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import * as React from "react";
 import Autoplay from "embla-carousel-autoplay";
 import { LiaCartPlusSolid } from "react-icons/lia";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 export default function ProductDetail() {
   const [product, setProduct] = useState([]);
+  const [newProduct, setNewProduct] = useState([]);
+
+  const navigate = useNavigate();
   useEffect(() => {
     document.title = "Rise - Cửa hàng trang sức DMC-Group";
+    window.scrollTo(top);
   });
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true })
@@ -54,6 +58,17 @@ export default function ProductDetail() {
     };
     getInfo();
   }, [path_product]);
+
+  useEffect(() => {
+    const getNewProduct = async () => {
+      await axios
+        .get("http://127.0.0.1:9999/product")
+        .then((res) => setNewProduct(res.data.record))
+        .catch((err) => console.log(err));
+    };
+    getNewProduct();
+  }, []);
+
   return (
     <div className="flex flex-col">
       <div className="px-10 py-5">
@@ -125,14 +140,14 @@ export default function ProductDetail() {
                 See review
               </h1>
             </div>
-            <h1>{product?.price} VND</h1>
+            <h1>{parseInt(product?.price).toLocaleString("vi-VN")} VND</h1>
           </div>
 
           <div className="border-b pb-3 gap-4 flex flex-col">
             <div className="grid grid-cols-3">
               <h1>Kích thước mặt:</h1>
               <div className="border font-semibold text-black w-20 flex items-center justify-center text-sm">
-                40mm
+                {product.size}
               </div>
               <Dialog>
                 <DialogTrigger>
@@ -148,7 +163,14 @@ export default function ProductDetail() {
             <div className="grid grid-cols-3">
               <h1>Chất liệu:</h1>
               <div className="border font-semibold text-black w-20 flex items-center justify-center text-sm">
-                Saphire
+                {product.material}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3">
+              <h1>Xuất xứ:</h1>
+              <div className="w-20 flex items-center justify-center text-sm">
+                {product.nation}
               </div>
             </div>
             <div className="flex flex-col gap-4">
@@ -187,7 +209,11 @@ export default function ProductDetail() {
             <h1 className="uppercase font-semibold">Thông tin chi tiết</h1>
           </div>
           <div className="border-b pb-3 gap-2 flex flex-col py-4 justify-center items-center text-sm ">
-            <React.Fragment>{product?.description_display}</React.Fragment>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: product?.description_display,
+              }}
+            ></div>
           </div>
           <Tabs defaultValue="shipping" className="w-full mb-5">
             <div className="border-b gap-2 flex flex-col">
@@ -373,15 +399,15 @@ export default function ProductDetail() {
           </div>
 
           <CarouselContent className="h-full">
-            {Array.from({ length: 10 }).map((_, index) => (
+            {newProduct?.map((item, index) => (
               <CarouselItem key={index} className="basis-1/4 h-[500px]">
                 <div className="flex flex-col gap-3 justify-center group">
                   <div className="group relative cursor-pointer items-center justify-center overflow-hidden transition-shadow ">
                     <div className="h-96">
                       <img
                         className="h-full w-full object-cover transition-transform duration-500  group-hover:scale-105 object-center"
-                        src="https://curnonwatch.com/wp-content/uploads/2024/03/FRONT-Kim-Ngu%CC%9Bu-2048x2048.jpg"
-                        alt=""
+                        src={item?.images[0]}
+                        alt={item?.product_name}
                       />
                     </div>
                     {/* Đổi img */}
@@ -394,10 +420,13 @@ export default function ProductDetail() {
                   </div>
 
                   <div className="text-sm flex flex-col gap-3">
-                    <h1 className="font-semibold hover:opacity-75 cursor-pointer">
-                      Zodiac
+                    <h1
+                      className="font-semibold hover:opacity-75 cursor-pointer"
+                      onClick={() => navigate(`/${item?.path_product}`)}
+                    >
+                      {item?.product_name}
                     </h1>
-                    <h1>124.000 VND</h1>
+                    <h1>{parseInt(item.price).toLocaleString("vi-VN")} VND</h1>
                   </div>
                 </div>
               </CarouselItem>

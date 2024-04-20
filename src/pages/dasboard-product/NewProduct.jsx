@@ -5,13 +5,13 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 
 import { SlCloudUpload } from "react-icons/sl";
 import { IoClose } from "react-icons/io5";
+import { useToast } from "@/components/ui/use-toast";
 
 import MarkdownIt from "markdown-it";
 import MdEditor from "react-markdown-editor-lite";
@@ -24,50 +24,31 @@ export default function NewProduct() {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [categories, setCategories] = useState([]);
   const [seller, setSeller] = useState([]);
-  const [categoryID, setCategoryID] = useState("");
-  const [sellerID, setSellerID] = useState("");
-  const [size, setSize] = useState("");
-  const [material, setMaterial] = useState("");
-  const [width, setWidth] = useState("");
-  const [color, setColor] = useState("");
-  const [input, setInput] = useState();
-  const [description, setDescription] = useState({ text: "", html: "" });
+  const { toast } = useToast();
 
-  const dataSend = {
-    product_id: input?.product_id,
-    product_name: input?.product_name,
-    seller: sellerID,
-    price: input?.price,
-    amount: input?.amount,
-    category_id: categoryID,
-    color: color,
-    material: material,
-    size: size,
-    width: width,
-    waterproof: input?.waterproof,
-    description_display: description.html,
-    description_markdown: description.text,
-  };
-  const sizes = {
-    1: ["24mm", "28mm", "32mm", "36mm", "40mm", "44mm", "48mm", "52mm", "56mm"],
-    2: ["5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"],
-    3: ["14", "15", "16", "17", "18"],
-    4: ["None"],
-    5: ["45", "46", "47", "48", "49", "50", "51", "52"],
+  const [product, setProduct] = useState({
+    product_id: "",
+    product_name: "",
+    seller: "",
+    category_id: "",
+    price: "",
+    amount: "",
+    color: "",
+    material: "",
+    size: "",
+    width: "",
+    waterproof: "",
+    description_display: "",
+    description_markdown: "",
+  });
+
+  const handleInput = (event) => {
+    setProduct({ ...product, [event.target.name]: event.target.value });
   };
 
-  const sizeList = sizes[categoryID] || [];
   useEffect(() => {
     document.title = "Thêm mới sản phẩm";
   });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setInput((preState) => ({
-      ...preState,
-      [name]: value,
-    }));
-  };
 
   useEffect(() => {
     const getCategories = async () => {
@@ -96,8 +77,12 @@ export default function NewProduct() {
   const mdParser = new MarkdownIt(/* Markdown-it options */);
 
   function handleEditorChange({ html, text }) {
-    console.log("handleEditorChange: ", html, text);
-    setDescription({ text: text, html: html });
+    // console.log("handleEditorChange: ", html, text);
+    setProduct({
+      ...product,
+      description_markdown: text,
+      description_display: html,
+    });
   }
 
   const handleFiles = (event) => {
@@ -122,29 +107,31 @@ export default function NewProduct() {
     try {
       const productResponse = await axios.post(
         "http://127.0.0.1:9999/product",
-        dataSend
+        product
       );
-      console.log(productResponse.data);
 
       if (productResponse.status === 200 && selectedFiles.length > 0) {
         const formData = new FormData();
-        formData.append("product_id", productResponse.data.product_id);
+        formData.append("product_id", product.product_id);
 
         for (let i = 0; i < selectedFiles.length; i++) {
           formData.append("images", selectedFiles[i]);
         }
 
-        const imageResponse = await axios.post(
-          "http://127.0.0.1:9999/upload-images",
-          formData,
-          {
+        await axios
+          .post("http://127.0.0.1:9999/upload-images", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
-          }
-        );
-
-        console.log(imageResponse.data);
+          })
+          .then((res) => {
+            toast({
+              title: "Thông báo",
+              description: "Thêm mới sản phẩm thành công",
+            });
+            console.log(res.data)
+          })
+          .catch((err) => console.log(err));
       }
     } catch (error) {
       console.error(error);
@@ -185,7 +172,7 @@ export default function NewProduct() {
             <Input
               placeholder="Mã sản phẩm"
               name="product_id"
-              onChange={handleChange}
+              onChange={handleInput}
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -193,7 +180,7 @@ export default function NewProduct() {
             <Input
               placeholder="Tên sản phẩm"
               name="product_name"
-              onChange={handleChange}
+              onChange={handleInput}
             />
           </div>
 
@@ -213,7 +200,7 @@ export default function NewProduct() {
                 placeholder="$$$"
                 type="number"
                 name="price"
-                onChange={handleChange}
+                onChange={handleInput}
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -222,7 +209,7 @@ export default function NewProduct() {
                 placeholder="Số lượng"
                 type="number"
                 name="amount"
-                onChange={handleChange}
+                onChange={handleInput}
               />
             </div>
           </div>
@@ -271,7 +258,11 @@ export default function NewProduct() {
             <h1 className="font-semibold text-xl py-4">Xuất xứ</h1>
             <div className="flex flex-col gap-2">
               <h1 className="font-bold text-sm">Loại sản phẩm</h1>
-              <Select onValueChange={(value) => setCategoryID(value)}>
+              <Select
+                onValueChange={(value) =>
+                  setProduct({ ...product, category_id: value })
+                }
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Chọn loại sản phẩm" />
                 </SelectTrigger>
@@ -289,7 +280,11 @@ export default function NewProduct() {
 
             <div className="flex flex-col gap-2">
               <h1 className="font-bold text-sm">Thương hiệu</h1>
-              <Select onValueChange={(value) => setSellerID(value)}>
+              <Select
+                onValueChange={(value) =>
+                  setProduct({ ...product, seller: value })
+                }
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Chọn thương hiệu" />
                 </SelectTrigger>
@@ -310,25 +305,20 @@ export default function NewProduct() {
             <h1 className="font-semibold text-xl py-4">Chi tiết sản phẩm</h1>
             <div className="flex flex-col gap-2">
               <h1 className="font-bold text-sm">Kích thước</h1>
-              <Select onValueChange={(value) => setSize(value)}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Chọn kích cỡ sản phẩm" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {sizeList.map((size, index) => (
-                      <SelectItem key={index} value={size}>
-                        {size}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+              <Input
+                placeholder="Kích thước sản phẩm"
+                name="size"
+                onChange={handleInput}
+              />
             </div>
 
             <div className="flex flex-col gap-2">
               <h1 className="font-bold text-sm">Chất liệu</h1>
-              <Select onValueChange={(value) => setMaterial(value)}>
+              <Select
+                onValueChange={(value) =>
+                  setProduct({ ...product, material: value })
+                }
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Chọn chất liệu sản phẩm" />
                 </SelectTrigger>
@@ -336,7 +326,8 @@ export default function NewProduct() {
                   <SelectGroup>
                     <SelectItem value="gold">Vàng</SelectItem>
                     <SelectItem value="silver">Bạc</SelectItem>
-                    <SelectItem value="bronze">Đồng</SelectItem>
+                    <SelectItem value="titanium">Titanium</SelectItem>
+                    <SelectItem value="alloy">Hợp kim</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -344,26 +335,20 @@ export default function NewProduct() {
 
             <div className="flex flex-col gap-2">
               <h1 className="font-bold text-sm">Chiều dài</h1>
-              <Select onValueChange={(value) => setWidth(value)}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Chọn chiều dài sản phẩm" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Fruits</SelectLabel>
-                    <SelectItem value="apple">Apple</SelectItem>
-                    <SelectItem value="banana">Banana</SelectItem>
-                    <SelectItem value="blueberry">Blueberry</SelectItem>
-                    <SelectItem value="grapes">Grapes</SelectItem>
-                    <SelectItem value="pineapple">Pineapple</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+              <Input
+                placeholder="Chiều dài sản phẩm"
+                name="width"
+                onChange={handleInput}
+              />
             </div>
 
             <div className="flex flex-col gap-2">
               <h1 className="font-bold text-sm">Màu sắc</h1>
-              <Select onValueChange={(value) => setColor(value)}>
+              <Select
+                onValueChange={(value) =>
+                  setProduct({ ...product, color: value })
+                }
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Chọn màu sắc sản phẩm" />
                 </SelectTrigger>
@@ -382,7 +367,7 @@ export default function NewProduct() {
               <Input
                 placeholder="Chống nước"
                 name="waterproof"
-                onChange={handleChange}
+                onChange={handleInput}
               />
             </div>
           </div>
