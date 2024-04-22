@@ -124,6 +124,8 @@ export default function Cart() {
       .catch((err) => console.log(err));
   };
 
+ 
+
   return (
     <div className="h-full flex flex-col justify-between">
       <div className="overflow-auto hover:overflow-auto">
@@ -131,112 +133,124 @@ export default function Cart() {
           <SheetTitle className="uppercase">Giỏ hàng</SheetTitle>
         </SheetHeader>
 
-        {cart.product?.map((item, index) => (
-          <div className="py-3 w-full flex flex-col gap-3 px-3" key={index}>
-            <div className="grid grid-cols-3">
-              <div className="col-span-1">
-                <img
-                  src={item?.image}
-                  alt={item.product_name}
-                  className="w-32 h-32 object-cover object-center"
-                />
-              </div>
-
-              <div className="col-span-2 flex flex-col justify-between">
-                <div className="flex flex-col gap-1">
-                  <div className="flex items-center justify-between w-full">
-                    <h3 className="font-medium">
-                      {item?.product_name} - {item?.size}
-                    </h3>
-                    <CiCircleRemove
-                      size={20}
-                      className="cursor-pointer"
-                      onClick={() =>
-                        handleDeleteProduct(item.product_id, cart.cart_id)
-                      }
+        {cart.product.length < 1
+          ? "Giỏ hàng trống"
+          : cart.product?.map((item, index) => (
+              <div className="py-3 w-full flex flex-col gap-3 px-3" key={index}>
+                <div className="grid grid-cols-3">
+                  <div className="col-span-1">
+                    <img
+                      src={item?.image}
+                      alt={item.product_name}
+                      className="w-32 h-32 object-cover object-center"
                     />
                   </div>
-                  <div className="text-xs text-[#807D7C]">{item?.category}</div>
-                </div>
 
-                <div className="flex items-center justify-between w-full">
-                  <h3 className="text-sm">
-                    {parseInt(item?.price).toLocaleString("vi-VN")} VND
-                  </h3>
-                  <div className="border rounded-lg px-2 py-[2px] flex items-center gap-1">
-                    <IoIosRemove
-                      size={20}
-                      className="cursor-pointer"
-                      onClick={() =>
-                        handleRemove(item.product_id, cart.cart_id)
-                      }
-                    />
-                    <input
-                      type="number"
-                      className="focus:outline-none text-right w-10  font-semibold hover:text-black focus:text-black  md:text-basecursor-default flex items-center outline-none"
-                      name="custom-input-number"
-                      value={item.amount}
-                      min="0"
-                      max={"100"}
-                      readOnly={true}
-                    ></input>
-                    <IoIosAdd
-                      size={20}
-                      color={item.total === item.total_product ? "" : "#807D7C"}
-                      className={`cursor-pointer`}
-                      onClick={() =>
-                        handleAdd(item.product_id, cart.account_id)
-                      }
-                    />
+                  <div className="col-span-2 flex flex-col justify-between">
+                    <div className="flex flex-col gap-1">
+                      <div className="flex items-center justify-between w-full">
+                        <h3 className="font-medium">
+                          {item?.product_name} - {item?.size}
+                        </h3>
+                        <CiCircleRemove
+                          size={20}
+                          className="cursor-pointer"
+                          onClick={() =>
+                            handleDeleteProduct(item.product_id, cart.cart_id)
+                          }
+                        />
+                      </div>
+                      <div className="text-xs text-[#807D7C]">
+                        {item?.category}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between w-full">
+                      <h3 className="text-sm">
+                        {parseInt(item?.price).toLocaleString("vi-VN")} VND
+                      </h3>
+                      <div className="border rounded-lg px-2 py-[2px] flex items-center gap-1">
+                        <IoIosRemove
+                          size={20}
+                          className="cursor-pointer"
+                          onClick={() =>
+                            handleRemove(item.product_id, cart.cart_id)
+                          }
+                        />
+                        <input
+                          type="number"
+                          className="focus:outline-none text-right w-10  font-semibold hover:text-black focus:text-black  md:text-basecursor-default flex items-center outline-none"
+                          name="custom-input-number"
+                          value={item.amount}
+                          min="0"
+                          max={"100"}
+                          readOnly={true}
+                        ></input>
+                        <IoIosAdd
+                          size={20}
+                          color={
+                            item.total === item.total_product ? "" : "#807D7C"
+                          }
+                          className={`cursor-pointer`}
+                          onClick={() =>
+                            handleAdd(item.product_id, cart.account_id)
+                          }
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        ))}
+            ))}
       </div>
 
-      <div className="flex flex-col gap-2">
-        <div className="flex flex-col gap-3 border-t pt-3">
-          <div className="w-full text-sm">
-            <div className="flex items-center justify-between">
-              <h1>Tạm tính</h1>
-              <h1>{parseInt(cart.cart_total).toLocaleString("vi-VN")} VND</h1>
+      {cart.product.length < 1 ? (
+        ""
+      ) : (
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3 border-t pt-3">
+            <div className="w-full text-sm">
+              <div className="flex items-center justify-between">
+                <h1>Tạm tính</h1>
+                <h1>{parseInt(cart.cart_total).toLocaleString("vi-VN")} VND</h1>
+              </div>
+            </div>
+
+            <div className="w-full text-sm">
+              <div className="flex items-center justify-between">
+                <h1>Giao hàng</h1>
+                <h1>
+                  {cart.cart_total > 700000
+                    ? "Giao hàng miễn phí"
+                    : `30.000 VND`}
+                </h1>
+              </div>
+            </div>
+
+            <div className="w-full">
+              <div className="flex items-center justify-between font-medium">
+                <h1>Tổng</h1>
+                <h1>
+                  {cart.cart_total > 700000
+                    ? parseInt(cart.cart_total).toLocaleString("vi-VN")
+                    : `${parseInt(cart.cart_total + 30000).toLocaleString(
+                        "vi-VN"
+                      )}`}{" "}
+                  VND
+                </h1>
+              </div>
             </div>
           </div>
 
-          <div className="w-full text-sm">
-            <div className="flex items-center justify-between">
-              <h1>Giao hàng</h1>
-              <h1>
-                {cart.cart_total > 700000 ? "Giao hàng miễn phí" : `30.000 VND`}
-              </h1>
-            </div>
-          </div>
-
-          <div className="w-full">
-            <div className="flex items-center justify-between font-medium">
-              <h1>Tổng</h1>
-              <h1>
-                {cart.cart_total > 700000
-                  ? parseInt(cart.cart_total).toLocaleString("vi-VN")
-                  : `${parseInt(cart.cart_total + 30000).toLocaleString(
-                      "vi-VN"
-                    )}`}{" "}
-                VND
-              </h1>
-            </div>
-          </div>
+          <SheetFooter className="">
+            <SheetClose asChild>
+              <Button className="w-full" type="submit">
+                Thanh toán ngay
+              </Button>
+            </SheetClose>
+          </SheetFooter>
         </div>
-
-        <SheetFooter className="">
-          <SheetClose asChild>
-            <Button className="w-full" type="submit">
-              Thanh toán ngay
-            </Button>
-          </SheetClose>
-        </SheetFooter>
-      </div>
+      )}
     </div>
   );
 }

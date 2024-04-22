@@ -13,6 +13,7 @@ import InfoProduct from "@/pages/dasboard-product/InfoProduct";
 import ProductCategory from "@/pages/product-info/ProductCategory";
 import ProductDetail from "@/pages/product-info/ProductDetail";
 import Page404 from "@/pages/page-404/Page404";
+import CustomerOrder from "@/pages/account/CustomerOrder";
 
 const publicRoute = [
   { path: "/login", page: LoginPage },
@@ -28,6 +29,7 @@ const publicRoute = [
 const accountRoute = [
   { path: "/account", page: UserPage },
   { path: "/account/address", page: Address },
+  { path: "/order", page: CustomerOrder },
 ];
 
 const adminRoute = [

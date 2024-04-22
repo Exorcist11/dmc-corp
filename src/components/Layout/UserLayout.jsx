@@ -8,13 +8,15 @@ import {
   SlEye,
   SlLogout,
   SlTag,
+  SlDrawer,
 } from "react-icons/sl";
 import React from "react";
-import { Toaster } from '@/components/ui/toaster';
+import { Toaster } from "@/components/ui/toaster";
 
 export default function UserLayout({ children }) {
   const items = [
     { name: "Mã ưu đãi", path: "/address", icon: <SlTag /> },
+    { name: "Đơn hàng của bạn", path: "/order", icon: <SlDrawer /> },
     { name: "Sổ địa chỉ", path: "/account/address", icon: <SlNotebook /> },
     { name: "Yêu thích", path: "/account/favorite", icon: <SlHeart /> },
     { name: "Sản phẩm đã xem", path: "/account/history", icon: <SlEye /> },
@@ -53,7 +55,9 @@ export default function UserLayout({ children }) {
             <div className="">
               {items?.map((item, index) => (
                 <div
-                  className="flex gap-3 items-center cursor-pointer hover:bg-[#edf1f5] px-6 py-3"
+                  className={`flex gap-3 items-center cursor-pointer px-6 py-3 hover:bg-[#edf1f5] ${
+                    window.location.pathname === item.path ? "bg-[#edf1f5]" : ""
+                  }`}
                   key={index}
                   onClick={() => navigate(`${item.path}`)}
                 >
