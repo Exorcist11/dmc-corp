@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Ratings } from "@/components/ui/rating";
 import { useEffect, useState } from "react";
 import { SlHeart } from "react-icons/sl";
+import { VscHeartFilled } from "react-icons/vsc";
 import { LiaShippingFastSolid } from "react-icons/lia";
 import { PiShieldCheckLight } from "react-icons/pi";
 import { MdCurrencyExchange } from "react-icons/md";
@@ -33,6 +34,10 @@ import axios from "axios";
 export default function ProductDetail() {
   const [product, setProduct] = useState([]);
   const [newProduct, setNewProduct] = useState([]);
+  const [favorite, setFavorite] = useState({
+    status: "",
+    action: "",
+  });
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -68,6 +73,39 @@ export default function ProductDetail() {
     };
     getNewProduct();
   }, []);
+
+  useEffect(() => {
+    const getFavorite = async () => {
+      await axios
+        .post("http://127.0.0.1:9999/favorite_product", {
+          account_id: localStorage.getItem("user_id"),
+          product_id: product?.product_id,
+        })
+        .then((res) => setFavorite(res.data));
+    };
+    getFavorite();
+  }, []);
+
+  const handleRemoteFavorite = async (product_id) => {
+    await axios
+      .post("http://127.0.0.1:9999/delete_wish_list", {
+        account_id: localStorage.getItem("user_id"),
+        product_id: product_id,
+      })
+      .then(() => setFavorite({ ...favorite, action: false }))
+      .catch((err) => console.log(err));
+  };
+
+  const handleAddFavorite = async (product_id) => {
+    await axios
+      .post("http://127.0.0.1:9999/add_to_wishlist", {
+        account_id: localStorage.getItem("user_id"),
+        product_id: product_id,
+      })
+      .then(() => setFavorite({ ...favorite, action: true }))
+      .catch((err) => console.log(err));
+  };
+  console.log(favorite.action)
 
   return (
     <div className="flex flex-col">
@@ -145,7 +183,7 @@ export default function ProductDetail() {
 
           <div className="border-b pb-3 gap-4 flex flex-col">
             <div className="grid grid-cols-3">
-              <h1>Kích thước mặt:</h1>
+              <h1>Kích thước:</h1>
               <div className="border font-semibold text-black w-20 flex items-center justify-center text-sm">
                 {product.size}
               </div>
@@ -182,7 +220,17 @@ export default function ProductDetail() {
                 >
                   Thêm giỏ hàng
                 </Button>
-                <SlHeart size={30} />
+                {favorite.action === true ? (
+                  <VscHeartFilled
+                    size={30}
+                    onClick={() => handleRemoteFavorite(product?.product_id)}
+                  />
+                ) : (
+                  <SlHeart
+                    size={30}
+                    onClick={() => handleAddFavorite(product?.product_id)}
+                  />
+                )}
               </div>
             </div>
             <div className="text-sm text-[#807d7c] flex flex-col gap-2">

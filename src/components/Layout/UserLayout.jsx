@@ -19,13 +19,14 @@ export default function UserLayout({ children }) {
     { name: "Đơn hàng của bạn", path: "/order", icon: <SlDrawer /> },
     { name: "Sổ địa chỉ", path: "/account/address", icon: <SlNotebook /> },
     { name: "Yêu thích", path: "/account/favorite", icon: <SlHeart /> },
-    { name: "Sản phẩm đã xem", path: "/account/history", icon: <SlEye /> },
+    { name: "Sản phẩm đã mua", path: "/account/history", icon: <SlEye /> },
   ];
 
   const navigate = useNavigate();
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col ">
       <Header />
+
       <div className="px-28 py-5 mt-[80px] bg-[#fafafa] h-full flex flex-col gap-5">
         <div>
           <h1
@@ -56,7 +57,9 @@ export default function UserLayout({ children }) {
               {items?.map((item, index) => (
                 <div
                   className={`flex gap-3 items-center cursor-pointer px-6 py-3 hover:bg-[#edf1f5] ${
-                    window.location.pathname === item.path ? "bg-[#edf1f5]" : ""
+                    window.location.pathname.startsWith(item.path)
+                      ? "bg-[#edf1f5]"
+                      : ""
                   }`}
                   key={index}
                   onClick={() => navigate(`${item.path}`)}
@@ -78,12 +81,13 @@ export default function UserLayout({ children }) {
             </div>
           </div>
 
-          <div className="bg-[#ffffff] w-2/3 rounded-lg border-[1px] p-4">
+          <div className="bg-[#ffffff] w-2/3 rounded-lg h-auto border-[1px] p-4">
             {children}
             <Toaster />
           </div>
         </div>
       </div>
+
       <Footer />
     </div>
   );

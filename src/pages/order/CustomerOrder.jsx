@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function CustomerOrder() {
   const [order, setOrder] = useState();
@@ -38,7 +39,7 @@ export default function CustomerOrder() {
         return null;
     }
   };
-
+  const navigate = useNavigate();
   return (
     <div className="flex flex-col">
       <h1 className="font-semibold text-xl">Đơn hàng của bạn</h1>
@@ -73,7 +74,10 @@ export default function CustomerOrder() {
 
                 <div className="flex items-center justify-between border-t pt-3">
                   {getStatusElement(item.status)}
-                  <h1 className="cursor-pointer hover:font-medium">
+                  <h1
+                    className="cursor-pointer hover:font-medium"
+                    onClick={() => navigate(`/order/${item.order_id}`)}
+                  >
                     Chi tiết đơn hàng
                   </h1>
                 </div>

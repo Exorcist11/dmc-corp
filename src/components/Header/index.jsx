@@ -29,7 +29,7 @@ export default function Header() {
           <NavigationMenuList className="flex uppercase gap-7 list-none w-full">
             <NavigationMenuItem>
               <NavigationMenuTrigger className="cursor-pointer uppercase text-base ">
-                Nam Giới
+                Trang sức
               </NavigationMenuTrigger>
               <NavigationMenuContent>
                 <HoverCard>
@@ -41,7 +41,7 @@ export default function Header() {
 
             <NavigationMenuItem>
               <NavigationMenuTrigger className="cursor-pointer uppercase text-base">
-                Nữ giới
+                Đồng hồ
               </NavigationMenuTrigger>
               <NavigationMenuContent className="w-full">
                 ád
@@ -57,7 +57,7 @@ export default function Header() {
           </NavigationMenuList>
         </NavigationMenu>
 
-        <div className="text-xl">DMC-Corp</div>
+        <div className="text-xl cursor-pointer" onClick={() => navigate('/')}>DMC-Corp</div>
 
         <div className="flex gap-7 uppercase">
           <div

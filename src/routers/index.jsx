@@ -13,7 +13,11 @@ import InfoProduct from "@/pages/dasboard-product/InfoProduct";
 import ProductCategory from "@/pages/product-info/ProductCategory";
 import ProductDetail from "@/pages/product-info/ProductDetail";
 import Page404 from "@/pages/page-404/Page404";
-import CustomerOrder from "@/pages/account/CustomerOrder";
+import CustomerOrder from "@/pages/order/CustomerOrder";
+import OrderDetail from "@/pages/order/OrderDetail";
+import OrderManager from "@/pages/dashboard/OrderManager";
+import OrderView from "@/pages/dashboard/OrderView";
+import FavoriteProduct from "@/pages/account/FavoriteProduct";
 
 const publicRoute = [
   { path: "/login", page: LoginPage },
@@ -29,7 +33,9 @@ const publicRoute = [
 const accountRoute = [
   { path: "/account", page: UserPage },
   { path: "/account/address", page: Address },
+  { path: "/account/favorite", page: FavoriteProduct },
   { path: "/order", page: CustomerOrder },
+  { path: "/order/:order_id", page: OrderDetail },
 ];
 
 const adminRoute = [
@@ -39,5 +45,7 @@ const adminRoute = [
   { path: "/dashboard/new-product", page: NewProduct },
   { path: "/dashboard/:path", page: ListProduct },
   { path: "/dashboard/:path/:product_id", page: InfoProduct, layout: null },
+  { path: "/dashboard/order", page: OrderManager },
+  { path: "/dashboard/order/:order_id", page: OrderView },
 ];
 export { publicRoute, accountRoute, adminRoute };

@@ -49,7 +49,7 @@ export default function ProductCategory() {
     };
     getCategory();
   }, [path]);
- 
+
   return (
     <div className="flex flex-col">
       <img
@@ -142,7 +142,9 @@ export default function ProductCategory() {
                   className="object-cover object-center h-[360px]"
                 />
                 <h1 className="font-semibold">{item?.product_name}</h1>
-                <h1 className="">{item?.price} VND</h1>
+                <h1 className="">
+                  {parseInt(item?.price).toLocaleString("vi-VN")} VND
+                </h1>
               </div>
             ))}
           </div>

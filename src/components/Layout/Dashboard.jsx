@@ -17,7 +17,6 @@ import { useNavigate } from "react-router-dom";
 export default function Dashboard({ children }) {
   const [hidden, setHidden] = useState(false);
   const [selectedAppMenu, setSelectedAppMenu] = useState(null);
-  const [hightlight, setHightlight] = useState(null);
 
   const navigate = useNavigate();
 
@@ -74,7 +73,15 @@ export default function Dashboard({ children }) {
         { name: "Quà tặng", link: "/dashboard/qua-tang" },
       ],
     },
-    { name: "Đơn hàng", icon: <SlDrawer /> },
+    {
+      name: "Đơn hàng",
+      icon: <SlDrawer />,
+      action: [
+        { name: "Đơn hàng gần đây", link: "/dashboard/order" },
+        { name: "Đơn hàng chưa xác nhận", link: "/2" },
+        { name: "Đơn hàng", link: "/3" },
+      ],
+    },
     { name: "News", icon: <SlNotebook /> },
     { name: "Nhà cung cấp", icon: <SlRocket /> },
   ];
@@ -85,7 +92,7 @@ export default function Dashboard({ children }) {
         <div>DMC-Corp</div>
         <div>Avatar</div>
       </div>
-      <div className="flex mt-16 ">
+      <div className="flex mt-16 h-full">
         <div className=" fixed w-1/6 h-full flex flex-col bg-white border-r shadow-sm">
           <div className="flex flex-col">
             <div
@@ -146,13 +153,14 @@ export default function Dashboard({ children }) {
                         key={index_action}
                         className="pl-6 hover:bg-[#eff2f6] rounded-sm h-7 justify-center flex flex-col"
                         onClick={() => {
-                          setHightlight(index_action);
                           navigate(`${item_action.link}`);
                         }}
                       >
                         <h1
                           className={`${
-                            hightlight === index_action
+                            window.location.pathname.startsWith(
+                              item_action.link
+                            )
                               ? "text-[#68acfa] font-medium"
                               : ""
                           }`}
