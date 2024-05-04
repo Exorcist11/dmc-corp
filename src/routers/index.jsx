@@ -18,6 +18,9 @@ import OrderDetail from "@/pages/order/OrderDetail";
 import OrderManager from "@/pages/dashboard/OrderManager";
 import OrderView from "@/pages/dashboard/OrderView";
 import FavoriteProduct from "@/pages/account/FavoriteProduct";
+import ProductHistory from "@/pages/account/ProductHistory";
+import OrderProduct from "@/pages/order/OrderProduct";
+
 
 const publicRoute = [
   { path: "/login", page: LoginPage },
@@ -27,6 +30,8 @@ const publicRoute = [
   { path: "/product/:path", page: ProductCategory },
   { path: "/:path_product", page: ProductDetail },
   { path: "/error", page: Page404 },
+  { path: "/order/product", page: OrderProduct },
+
   // { path: "/account", page: UserPage },
 ];
 
@@ -36,6 +41,7 @@ const accountRoute = [
   { path: "/account/favorite", page: FavoriteProduct },
   { path: "/order", page: CustomerOrder },
   { path: "/order/:order_id", page: OrderDetail },
+  { path: "/account/history", page: ProductHistory },
 ];
 
 const adminRoute = [

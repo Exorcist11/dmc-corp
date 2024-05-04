@@ -15,7 +15,7 @@ import { Toaster } from "@/components/ui/toaster";
 
 export default function UserLayout({ children }) {
   const items = [
-    { name: "Mã ưu đãi", path: "/address", icon: <SlTag /> },
+    // { name: "Mã ưu đãi", path: "/address", icon: <SlTag /> },
     { name: "Đơn hàng của bạn", path: "/order", icon: <SlDrawer /> },
     { name: "Sổ địa chỉ", path: "/account/address", icon: <SlNotebook /> },
     { name: "Yêu thích", path: "/account/favorite", icon: <SlHeart /> },

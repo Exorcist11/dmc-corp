@@ -9,8 +9,10 @@ import { CiCircleRemove } from "react-icons/ci";
 import { IoIosRemove, IoIosAdd } from "react-icons/io";
 import { Button } from "../ui/button";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Cart() {
+  const navigate = useNavigate()
   const [cart, setCart] = useState({
     account_id: "",
     cart_id: "",
@@ -21,14 +23,18 @@ export default function Cart() {
   });
   useEffect(() => {
     const getCart = async () => {
-      await axios
-        .get(
-          `http://127.0.0.1:9999/settings_cart/${localStorage.getItem(
-            "user_id"
-          )}`
-        )
-        .then((res) => setCart(res.data))
-        .catch((err) => console.log(err));
+      if (localStorage.getItem("user_id")) {
+        await axios
+          .get(
+            `http://127.0.0.1:9999/settings_cart/${localStorage.getItem(
+              "user_id"
+            )}`
+          )
+          .then((res) => setCart(res.data))
+          .catch((err) => console.log(err));
+      } else {
+        console.log("Chưa đăng nhập");
+      }
     };
     getCart();
   }, []);
@@ -123,8 +129,6 @@ export default function Cart() {
       })
       .catch((err) => console.log(err));
   };
-
- 
 
   return (
     <div className="h-full flex flex-col justify-between">
@@ -244,7 +248,7 @@ export default function Cart() {
 
           <SheetFooter className="">
             <SheetClose asChild>
-              <Button className="w-full" type="submit">
+              <Button className="w-full" type="submit" onClick={() => navigate('/order/product')}>
                 Thanh toán ngay
               </Button>
             </SheetClose>

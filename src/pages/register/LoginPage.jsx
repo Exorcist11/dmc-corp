@@ -31,14 +31,18 @@ export default function LoginPage() {
           account
         );
         if (response.data.status === 200) {
-          localStorage.setItem("user_id", response?.data.info.account_id);
-          localStorage.setItem("user_name", response?.data.info.username);
-          navigate("/");
+          if (response.data.info.role_id == "R1") {
+            localStorage.setItem("user_id", response?.data.info.account_id);
+            localStorage.setItem("user_name", response?.data.info.username);
+            navigate("/");
+          } else {
+            navigate('/dashboard')
+          }
         } else {
           setErrors(response.data.message);
         }
       } else {
-        setErrors('Vui lòng nhập đầy đủ tài khoản và mật khẩu!')
+        setErrors("Vui lòng nhập đầy đủ tài khoản và mật khẩu!");
       }
     } catch (error) {
       if (error.request.status === 401) {
