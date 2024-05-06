@@ -105,7 +105,6 @@ export default function ProductDetail() {
       .then(() => setFavorite({ ...favorite, action: true }))
       .catch((err) => console.log(err));
   };
-  console.log(favorite.action)
 
   return (
     <div className="flex flex-col">

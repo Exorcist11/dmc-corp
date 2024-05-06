@@ -6,9 +6,24 @@ import { SlLink } from "react-icons/sl";
 
 import SliderProduct from "@/components/Slider/SliderProduct";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Homepage() {
   const navigate = useNavigate();
+  const [product, setProduct] = useState([]);
+  useEffect(() => {
+    document.title = "Trang sức thời trang DMC-Group";
+  });
+  useEffect(() => {
+    const getProduct = async () => {
+      await axios
+        .get("http://127.0.0.1:9999/product")
+        .then((res) => setProduct(res.data.record))
+        .catch((err) => console.log(err));
+    };
+    getProduct();
+  }, []);
   const menuCategory = [
     {
       name: "Đồng hồ",
@@ -37,6 +52,20 @@ export default function Homepage() {
       navTo: "qua-tang",
     },
   ];
+  
+  function getRandomProduct(arr, count) {
+    const shuffled = arr.slice();
+    const result = [];
+
+    for (let i = 0; i < count; i++) {
+      const randomIndex = Math.floor(Math.random() * shuffled.length);
+      const selectedMonth = shuffled.splice(randomIndex, 1)[0];
+
+      result.push(selectedMonth);
+    }
+
+    return result;
+  }
 
   return (
     <div className="flex flex-col">
@@ -150,22 +179,22 @@ export default function Homepage() {
 
       <div className="grid grid-cols-2">
         <div className="grid grid-cols-2 bottom-[1px]">
-          <img
-            src="https://curnonwatch.com/wp-content/uploads/2024/02/Everly-white-silver-2-1.jpg"
-            alt=""
-          />
-          <img
-            src="https://curnonwatch.com/wp-content/uploads/2024/02/Ellen-SIDE4363.png"
-            alt=""
-          />
-          <img
-            src="https://curnonwatch.com/wp-content/uploads/2024/02/Eleni4563773.png"
-            alt=""
-          />
-          <img
-            src="https://curnonwatch.com/wp-content/uploads/2024/02/T2-6-min.76545.png"
-            alt=""
-          />
+          {getRandomProduct(product, 4)?.map((item, index) => (
+            <div
+              className={`relative bg-cover bg-center flex items-end p-5 border-gray-950`}
+              key={index}
+              style={{ backgroundImage: `url(${item?.images[0]})` }}
+            >
+              <div className="flex items-end p-5 gap-2 opacity-0 absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300 hover:opacity-100 cursor-pointer" onClick={() => navigate(`/${item?.path_product}`)} >
+                <div className="relative z-10 flex flex-col gap-2 text-white">
+                  <h1 className="font-medium text-lg">{item?.category}</h1>
+                  <h1 className="text-sm">
+                    {parseInt(item?.price).toLocaleString("vi-VN")} VND
+                  </h1>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
         <img
           src="https://curnonwatch.com/wp-content/uploads/2024/01/ANN9861-scaled-e1705394776499.jpg"

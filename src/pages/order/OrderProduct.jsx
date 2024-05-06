@@ -1,15 +1,25 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { CiLocationOn, CiDollar, CiCreditCard2 } from "react-icons/ci";
+import {
+  CiLocationOn,
+  CiDollar,
+  CiCreditCard2,
+  CiCircleRemove,
+} from "react-icons/ci";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
-import { CiCircleRemove } from "react-icons/ci";
+
 import { IoIosRemove, IoIosAdd } from "react-icons/io";
-import { LiaShippingFastSolid } from "react-icons/lia";
+import {
+  LiaShippingFastSolid,
+  LiaAngleDoubleRightSolid,
+} from "react-icons/lia";
 import { PiShieldCheckLight } from "react-icons/pi";
 import { MdCurrencyExchange } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { BsPlusLg } from "react-icons/bs";
 
 export default function OrderProduct() {
   const navigate = useNavigate();
@@ -22,9 +32,11 @@ export default function OrderProduct() {
     province: "",
     ward: "",
   });
+  const [lstAddress, setLstAddress] = useState([]);
   const [payment, setPayment] = useState("cash");
 
   const [cart, setCart] = useState("");
+
   useEffect(() => {
     document.title = "Thanh toán giỏ hàng";
   });
@@ -44,7 +56,6 @@ export default function OrderProduct() {
     };
     listAddress();
   }, []);
-  console.log(address);
 
   useEffect(() => {
     const getCart = async () => {
@@ -63,6 +74,17 @@ export default function OrderProduct() {
     };
     getCart();
   }, []);
+
+  useEffect(() => {
+    const getAddress = async () => {
+      await axios
+        .get(`http://127.0.0.1:9999/address/${localStorage.getItem("user_id")}`)
+        .then((res) => setLstAddress(res.data.list_address))
+        .catch((err) => console.log(err));
+    };
+    getAddress();
+  }, []);
+  console.log(lstAddress);
   const handleRemove = async (product_id, cart_id) => {
     try {
       await axios.patch("http://127.0.0.1:9999/remove_product", {
@@ -173,17 +195,57 @@ export default function OrderProduct() {
         </h1>
         <div className="flex items-center gap-3 text-sm">
           <CiLocationOn />
-          <h1> Địa chỉ nhận hàng</h1>
+          <h1>Địa chỉ nhận hàng</h1>
         </div>
-        <div className="border-[1px] px-4 py-2 rounded-lg text-sm flex flex-col gap-1">
-          <div className="flex justify-between">
-            <h1>
-              {address?.full_name} | {address?.phone_number}
-            </h1>
+        <div className="flex items-center gap-3">
+          <div className="border-[1px] px-4 py-2 rounded-lg text-sm flex flex-col gap-1 w-3/4">
+            <div className="flex justify-between">
+              <h1>
+                {address?.full_name} | {address?.phone_number}
+              </h1>
+            </div>
+            <div>{address?.note}</div>
+            <div>
+              {address?.ward} - {address?.district} - {address?.province}
+            </div>
           </div>
-          <div>{address?.note}</div>
-          <div>
-            {address?.ward} - {address?.district} - {address?.province}
+          <div className="cursor-pointer">
+            <Dialog>
+              <DialogTrigger>
+                <LiaAngleDoubleRightSolid size={40} />
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl">
+                <RadioGroup
+                  className="w-full"
+                  defaultValue={lstAddress[0]?.address_id}
+                  onValueChange={(value) => console.log(value)}
+                >
+                  {lstAddress?.map((item, index) => (
+                    <div key={index} className="flex items-center gap-3 w-full">
+                      <RadioGroupItem
+                        value={item?.address_id}
+                        id={item?.address_id}
+                      />
+                      <div className="border-[1px] px-4 py-2 rounded-lg text-sm flex flex-col gap-2 w-4/5">
+                        <div className="flex justify-between">
+                          <h1>
+                            {item?.full_name} | {item?.phone_number}
+                          </h1>
+                        </div>
+                        <div>{item?.note}</div>
+                        <div>
+                          {item?.ward} - {item?.district} - {item?.province}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </RadioGroup>
+                <div className="flex items-center gap-3 text-sm justify-center text-blue-600 cursor-pointer">
+                  <BsPlusLg />
+                  <h1>Thêm mới địa chỉ</h1>
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
         <h1 className="font-semibold uppercase text-xl">
@@ -203,6 +265,7 @@ export default function OrderProduct() {
               </Label>
             </div>
           </div>
+
           <div className="flex items-center space-x-2 ">
             <RadioGroupItem value="banking" id="r2" />
             <div className="flex items-center gap-3 border p-4 rounded-md w-72">
@@ -211,6 +274,17 @@ export default function OrderProduct() {
                 Thanh toán qua ngân hàng
               </Label>
             </div>
+          </div>
+          <div
+            className={`${
+              payment === "banking" ? "" : "hidden"
+            } flex items-center justify-center gap-5`}
+          >
+            <img
+              src="/public/banking.jpg"
+              alt="QR"
+              className=" h-96 object-cover object-center"
+            />
           </div>
         </RadioGroup>
         <Button

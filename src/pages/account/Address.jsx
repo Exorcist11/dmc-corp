@@ -3,9 +3,7 @@ import { useEffect, useState } from "react";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
-  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
@@ -41,6 +39,9 @@ export default function Address() {
   const [address, setAddress] = useState([]);
   const [input, setInput] = useState();
   const [infoAddress, setInfoAddress] = useState([]);
+  const rowPerPage = 3;
+  const [startIndex, setStartIndex] = useState(0);
+  const [endIndex, setEndIndex] = useState(rowPerPage);
   const getProvince = async () => {
     await axios
       .get("http://127.0.0.1:9999/provinces")
@@ -122,7 +123,6 @@ export default function Address() {
         .catch((err) => console.log(err));
     }
   };
- 
 
   useEffect(() => {
     handleGetAddress();
@@ -148,7 +148,7 @@ export default function Address() {
       <div className="flex flex-col gap-3">
         <h1 className="text-xl font-semibold">Sổ địa chỉ</h1>
         {address?.length > 0 ? (
-          address.map((item, index) => (
+          address?.slice(startIndex, endIndex).map((item, index) => (
             <div
               className="border-[1px] p-4 rounded-lg text-sm flex flex-col gap-2"
               key={index}
@@ -232,7 +232,7 @@ export default function Address() {
                                 Quận/ Huyện
                               </Label>
                               <SelectTrigger>
-                                <SelectValue placeholder="Quận/ Huyện"  />
+                                <SelectValue placeholder="Quận/ Huyện" />
                               </SelectTrigger>
                               <SelectContent>
                                 {districts?.map((item, index) => (
@@ -419,25 +419,32 @@ export default function Address() {
 
           <Pagination>
             <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious href="#" />
+              <PaginationItem className="cursor-pointer">
+                <PaginationPrevious
+                  className={
+                    startIndex === 0
+                      ? "pointer-events-none opacity-50"
+                      : undefined
+                  }
+                  onClick={() => {
+                    setStartIndex(startIndex - rowPerPage);
+                    setEndIndex(endIndex - rowPerPage);
+                  }}
+                />
               </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">1</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#" isActive>
-                  2
-                </PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">3</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationNext href="#" />
+
+              <PaginationItem className="cursor-pointer">
+                <PaginationNext
+                  className={
+                    endIndex > address?.length
+                      ? "pointer-events-none opacity-50"
+                      : undefined
+                  }
+                  onClick={() => {
+                    setStartIndex(startIndex + rowPerPage);
+                    setEndIndex(endIndex + rowPerPage);
+                  }}
+                />
               </PaginationItem>
             </PaginationContent>
           </Pagination>

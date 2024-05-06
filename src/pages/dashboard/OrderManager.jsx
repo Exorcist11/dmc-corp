@@ -71,7 +71,7 @@ export default function OrderManager() {
     switch (payment) {
       case "cash":
         return <h1>Thanh toán khi nhận hàng (COD)</h1>;
-      case "baking":
+      case "banking":
         return <h1>Thanh toán bằng thẻ ngân hàng</h1>;
       default:
         return null;
