@@ -21,6 +21,7 @@ import FavoriteProduct from "@/pages/account/FavoriteProduct";
 import ProductHistory from "@/pages/account/ProductHistory";
 import OrderProduct from "@/pages/order/OrderProduct";
 import SearchResult from "@/pages/home/SearchResult";
+import AboutUs from "@/pages/home/AboutUs";
 
 const publicRoute = [
   { path: "/login", page: LoginPage },
@@ -32,6 +33,7 @@ const publicRoute = [
   { path: "/error", page: Page404 },
   { path: "/order/product", page: OrderProduct },
   { path: "/search", page: SearchResult },
+  { path: "/about-us", page: AboutUs },
   // { path: "/account", page: UserPage },
 ];
 

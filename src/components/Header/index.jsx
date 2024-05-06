@@ -66,7 +66,10 @@ export default function Header() {
               Đồng hồ
             </div>
 
-            <div className="cursor-pointer uppercase text-base hover:font-semibold">
+            <div
+              className="cursor-pointer uppercase text-base hover:font-semibold"
+              onClick={() => navigate("/about-us")}
+            >
               Về chúng tôi
             </div>
           </div>
