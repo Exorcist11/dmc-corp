@@ -47,7 +47,7 @@ function App() {
           return (
             <Route
               key={index}
-              path={route?.path ? route?.path : "*"}
+              path={route?.path ? route?.path : "/err"}
               element={
                 <Layout>
                   <Page />
@@ -56,8 +56,7 @@ function App() {
             />
           );
         })}
-
-        <Route path="/err" element={<Page404 />} />
+        <Route path="*" element={<Page404 />} />
       </Routes>
     </div>
   );

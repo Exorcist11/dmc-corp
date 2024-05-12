@@ -90,7 +90,7 @@ export default function Homepage() {
         />
       </div>
 
-      <div className="grid grid-cols-5 h-80">
+      <div className="grid grid-cols-4 h-[400px]">
         {menuCategory?.map((item, index) => (
           <div
             onClick={() => navigate(`/product/${item?.navTo}`)}

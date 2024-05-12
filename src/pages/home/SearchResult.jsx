@@ -94,12 +94,12 @@ export default function SearchResult() {
                     {/* Đổi img */}
                     {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent  group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div> */}
                     <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-end px-9 text-center transition-all duration-300 group-hover:translate-y-0 pb-5 font-semibold">
-                      <button
+                      <Button
                         onClick={() => addToCart(item?.product_id)}
                         className="rounded-full bg-white  hover:shadow text-black py-2 px-3.5 font-com text-xs capitalize flex gap-1 justify-center items-center"
                       >
                         Thêm vào giỏ hàng <LiaCartPlusSolid size={18} />
-                      </button>
+                      </Button>
                     </div>
                   </div>
 

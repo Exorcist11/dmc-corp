@@ -32,6 +32,7 @@ import axios from "axios";
 export default function Customers() {
   const { role } = useParams();
   const [invoices, setInvoices] = useState([]);
+  const [search, setSearch] = useState("");
   const [person, setPerson] = useState({
     user_name: "",
     full_name: "",
@@ -41,7 +42,7 @@ export default function Customers() {
     date_of_birth: "",
     address: [],
   });
-  
+
   const getPerson = useCallback(async () => {
     await axios
       .get(`http://127.0.0.1:9999/role/${role}`)
@@ -85,7 +86,11 @@ export default function Customers() {
           </h1>
 
           <div className="flex gap-3 items-center">
-            <Input icon={<SlMagnifier />} placeholder="Search" />
+            <Input
+              icon={<SlMagnifier />}
+              placeholder="Search"
+              onChange={(e) => setSearch(e.target.value)}
+            />
 
             <Button className="bg-gray-500">
               <SlDoc size={18} color="white" />{" "}
@@ -117,35 +122,41 @@ export default function Customers() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {invoices.map((invoice, index) => (
-                <TableRow key={index}>
-                  <TableCell className="font-medium">{index + 1}</TableCell>
-                  <TableCell>{invoice?.username}</TableCell>
-                  <TableCell>{invoice?.full_name}</TableCell>
-                  <TableCell>{invoice?.email}</TableCell>
-                  <TableCell>{invoice?.phone_number}</TableCell>
-                  <TableCell className="text-right">
-                    <DialogTrigger
-                      onClick={() => handleView(invoice?.user_id)}
-                      asChild
-                    >
+              {invoices
+                .filter((item) => {
+                  return search.toLocaleLowerCase() === ""
+                    ? item
+                    : item.full_name.toLocaleLowerCase().includes(search);
+                })
+                .map((invoice, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="font-medium">{index + 1}</TableCell>
+                    <TableCell>{invoice?.username}</TableCell>
+                    <TableCell>{invoice?.full_name}</TableCell>
+                    <TableCell>{invoice?.email}</TableCell>
+                    <TableCell>{invoice?.phone_number}</TableCell>
+                    <TableCell className="text-right">
+                      <DialogTrigger
+                        onClick={() => handleView(invoice?.user_id)}
+                        asChild
+                      >
+                        <label
+                          htmlFor="update"
+                          className="hover:font-medium cursor-pointer hover:underline"
+                        >
+                          View profile
+                        </label>
+                      </DialogTrigger>{" "}
+                      |{" "}
                       <label
-                        htmlFor="update"
+                        htmlFor="delete"
                         className="hover:font-medium cursor-pointer hover:underline"
                       >
-                        View profile
+                        Delete
                       </label>
-                    </DialogTrigger>{" "}
-                    |{" "}
-                    <label
-                      htmlFor="delete"
-                      className="hover:font-medium cursor-pointer hover:underline"
-                    >
-                      Delete
-                    </label>
-                  </TableCell>
-                </TableRow>
-              ))}
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
             <TableFooter>
               <TableRow>

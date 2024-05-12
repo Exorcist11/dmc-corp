@@ -2,6 +2,12 @@ import { SlUser, SlBag, SlMagnifier } from "react-icons/sl";
 
 import { useNavigate } from "react-router-dom";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import {
   HoverCard,
@@ -16,6 +22,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Separator } from "@/components/ui/separator";
 
 import Cart from "../Cart/Cart";
 import { Input } from "../ui/input";
@@ -26,48 +33,61 @@ export default function Header() {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
 
+  const menus = [
+    { name: "Đồng hồ", link: "dong-ho" },
+    { name: "Vòng tay", link: "vong-tay" },
+    { name: "Dây chuyền", link: "day-chuyen" },
+    { name: "Nhẫn", link: "nhan" },
+  ];
+
   return (
     <Sheet>
       <div className="h-20 flex justify-between items-center px-10 border-b-[1px] border-gray-300 flex-shrink-0 fixed top-0 z-30 left-0 right-0 bg-white w-screen">
+        <div className="text-xl cursor-pointer" onClick={() => navigate("/")}>
+          DMC-Corp
+        </div>
+
         <div>
-          <div className="flex uppercase gap-7 list-none w-full">
-            <HoverCard>
+          <div className="flex uppercase gap-7 list-none w-full font-semibold text-sm">
+            <div
+              className="cursor-pointer uppercase  hover:font-semibold"
+              onClick={() => navigate("/product/best-seller")}
+            >
+              Best Seller
+            </div>
+
+            <HoverCard openDelay={0}>
               <HoverCardTrigger>
-                <div className="cursor-pointer uppercase text-base hover:font-semibold">
+                <div className="cursor-pointer uppercase  hover:font-semibold">
                   Trang sức
                 </div>
               </HoverCardTrigger>
-              <HoverCardContent className="flex flex-col gap-3 w-screen mt-5">
-                <div
-                  className="hover:bg-slate-300 cursor-pointer border-b py-3 px-2"
-                  onClick={() => navigate("/product/nhan")}
-                >
-                  Nhẫn
-                </div>
-                <div
-                  className="hover:bg-slate-300 cursor-pointer border-b py-3 px-2"
-                  onClick={() => navigate("/product/day-chuyen")}
-                >
-                  Dây chuyền
-                </div>
-                <div
-                  className="hover:bg-slate-300 cursor-pointer border-b py-3 px-2"
-                  onClick={() => navigate("/product/vong-tay")}
-                >
-                  Vòng tay
+              <HoverCardContent className="flex flex-col items-center w-screen mt-5">
+                <div>
+                  {menus.map((item, index) => (
+                    <div key={index}>
+                      <div
+                        className="hover:bg-slate-300 cursor-pointer w-[500px] text-center py-3 px-2"
+                        onClick={() => navigate(`/product/${item.link}`)}
+                      >
+                        {item.name}
+                      </div>
+                      <Separator />
+                    </div>
+                  ))}
                 </div>
               </HoverCardContent>
             </HoverCard>
 
             <div
-              className="cursor-pointer uppercase text-base hover:font-semibold"
-              onClick={() => navigate("/product/dong-ho")}
+              className="cursor-pointer uppercase  hover:font-semibold"
+              onClick={() => navigate("/blog")}
             >
-              Đồng hồ
+              Blog
             </div>
 
             <div
-              className="cursor-pointer uppercase text-base hover:font-semibold"
+              className="cursor-pointer uppercase "
               onClick={() => navigate("/about-us")}
             >
               Về chúng tôi
@@ -75,28 +95,20 @@ export default function Header() {
           </div>
         </div>
 
-        <div className="text-xl cursor-pointer" onClick={() => navigate("/")}>
-          DMC-Corp
-        </div>
-
         <div className="flex gap-7 uppercase">
           <DropdownMenu>
             <DropdownMenuTrigger>
-              {/* <div className="flex gap-2 items-center cursor-pointer">
-                <Input
-                  icon={<SlMagnifier />}
-                  placeholder="Tìm kiếm sản phẩm"
-                  className="rounded-full"
-                  value={search}
-                  onChange={(e) => {
-                    setSearch(e.target.value);
-                    setIsDropdownOpen(!!e.target.value);
-                  }}
-                />
-              </div> */}
               <div className="flex gap-2 items-center cursor-pointer">
-                <h1>Tìm kiếm </h1>
-                <SlMagnifier />
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <SlMagnifier />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Tìm kiếm</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-screen flex flex-col justify-center items-center mt-5">
@@ -126,17 +138,33 @@ export default function Header() {
                 : navigate("/login")
             }
           >
-            {!localStorage.getItem("user_name") ? (
-              <h1>Đăng nhập</h1>
-            ) : (
-              <h1>Tài khoản</h1>
-            )}
-            <SlUser />
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <SlUser />
+                </TooltipTrigger>
+                <TooltipContent>
+                  {!localStorage.getItem("user_name") ? (
+                    <h1>Đăng nhập</h1>
+                  ) : (
+                    <h1>Tài khoản</h1>
+                  )}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
 
           <SheetTrigger className="flex gap-2 items-center cursor-pointer">
-            <h1>Giỏ hàng</h1>
-            <SlBag />
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <SlBag />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Giỏ hàng</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </SheetTrigger>
         </div>
       </div>

@@ -1,4 +1,3 @@
-import { BsPlusLg } from "react-icons/bs";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,6 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { LiaCartPlusSolid } from "react-icons/lia";
 import axios from "axios";
 import {
   Pagination,
@@ -25,6 +25,8 @@ import {
 import { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
+
 
 export default function ProductCategory() {
   const [products, setProducts] = useState([]);
@@ -40,9 +42,14 @@ export default function ProductCategory() {
 
   useEffect(() => {
     const getCategory = async () => {
-      if (path) {
+      if (path !== "best-seller") {
         axios
           .get(`http://127.0.0.1:9999/product_by_category/${path}`)
+          .then((res) => setProducts(res.data))
+          .catch((err) => console.log(err));
+      } else {
+        axios
+          .get(`http://127.0.0.1:9999/product/best-seller`)
           .then((res) => setProducts(res.data))
           .catch((err) => console.log(err));
       }
@@ -58,44 +65,69 @@ export default function ProductCategory() {
     setProducts({ ...products, record: sortedProducts });
   };
 
-  const menus = [
-    { name: "Đồng hồ", path: "/" },
-    { name: "Vòng tay", path: "/" },
-    { name: "Đồng hồ", path: "/" },
-    { name: "Đồng hồ", path: "/" },
-    { name: "Đồng hồ", path: "/" },
-  ];
+  const getBanner = (category) => {
+    switch (category) {
+      case "dong-ho":
+        return (
+          <img
+            src="/public/Banner-all.jpg"
+            className="object-cover object-center h-[300px] w-full"
+          />
+        );
+      case "vong-tay":
+        return (
+          <img
+            src="/public/Banner-VongTay.jpg"
+            className="object-cover object-center h-[300px] w-full"
+          />
+        );
+      case "nhan":
+        return (
+          <img
+            src="/public/BannerProduct-ring.png"
+            className="object-cover object-center w-full"
+          />
+        );
+      case "day-chuyen":
+        return (
+          <img
+            src="/public/BannerProduct-day.png"
+            className="object-cover object-center w-full"
+          />
+        );
+      case "best-seller":
+        return (
+          <img
+            src="/public/BestSeller.jpg"
+            className="object-cover object-center w-full"
+          />
+        );
+      default:
+        return null;
+    }
+  };
+  const addToCart = async (product_id) => {
+    await axios
+      .post("http://127.0.0.1:9999/add_to_cart", {
+        product_id: product_id,
+        account_id: localStorage.getItem("user_id"),
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
 
   return (
     <div className="flex flex-col h-full">
-      <div className="grid grid-cols-5 px-10 h-full">
-        <div className="col-span-1 border-r flex flex-col gap-3 py-5 h-full">
-          <h1 className="uppercase font-semibold text-xl">Danh mục</h1>
-          <div className="uppercase flex flex-col gap-3 text-sm px-5">
-            {menus?.map((item, index) => (
-              <div
-                className="flex justify-between items-center cursor-pointer "
-                key={index}
-              >
-                <h1 className="">{item?.name}</h1>
-                <BsPlusLg color="#656c77" size={17} />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="p-5 col-span-4 flex flex-col justify-between gap-3">
-          <div className="flex flex-col gap-2">
+      <div className="flex flex-col px-10 h-full">
+        <div className="p-5 flex flex-col justify-between gap-3">
+          <div className="flex flex-col gap-4">
             <div className="w-full">
               <Breadcrumb>
                 <BreadcrumbList>
                   <BreadcrumbItem>
                     <BreadcrumbLink href="/">Trang chủ</BreadcrumbLink>
                   </BreadcrumbItem>
-                  <BreadcrumbSeparator>/</BreadcrumbSeparator>
-                  <BreadcrumbItem>
-                    <BreadcrumbLink>Sản phẩm</BreadcrumbLink>
-                  </BreadcrumbItem>
+
                   <BreadcrumbSeparator>/</BreadcrumbSeparator>
                   <BreadcrumbItem>
                     <BreadcrumbPage>{products?.category}</BreadcrumbPage>
@@ -103,6 +135,8 @@ export default function ProductCategory() {
                 </BreadcrumbList>
               </Breadcrumb>
             </div>
+
+            <div>{getBanner(path)}</div>
 
             <div className="flex items-center justify-between text-[#88898d] text-sm">
               <div className="flex items-center gap-3">
@@ -135,23 +169,40 @@ export default function ProductCategory() {
                 ?.slice(startIndex, endIndex)
                 .map((item, index) => (
                   <div
-                    className="flex flex-col gap-2 cursor-pointer"
+                    className="flex flex-col gap-3 justify-center group"
                     key={index}
-                    onClick={() => navigate(`/${item?.path_product}`)}
                   >
-                    <img
-                      src={
-                        item.images
-                          ? item?.images
-                          : "https://curnonwatch.com/wp-content/uploads/2024/02/1_Brown4.876543.png"
-                      }
-                      alt=""
-                      className="object-cover object-center h-[360px]"
-                    />
-                    <h1 className="font-semibold">{item?.product_name}</h1>
-                    <h1 className="">
-                      {parseInt(item?.price).toLocaleString("vi-VN")} VND
-                    </h1>
+                    <div className="group relative cursor-pointer items-center justify-center overflow-hidden transition-shadow ">
+                      <div className="h-96">
+                        <img
+                          className="h-full w-full object-cover transition-transform duration-500  group-hover:scale-105 object-center"
+                          src={item.images}
+                          alt={item?.product_name}
+                        />
+                      </div>
+                      {/* Đổi img */}
+                      {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent  group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div> */}
+                      <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-end px-9 text-center transition-all duration-300 group-hover:translate-y-0 pb-5 font-semibold">
+                        <button
+                          onClick={() => addToCart(item?.product_id)}
+                          className="rounded-full bg-white  hover:shadow text-black py-2 px-3.5 font-com text-xs capitalize flex gap-1 justify-center items-center"
+                        >
+                          Thêm vào giỏ hàng <LiaCartPlusSolid size={18} />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                      <h1
+                        className="font-semibold hover:opacity-75 cursor-pointer "
+                        onClick={() => navigate(`/${item?.path_product}`)}
+                      >
+                        {item.product_name}
+                      </h1>
+                      <h1>
+                        {parseInt(item?.price).toLocaleString("vi-VN")} VND
+                      </h1>
+                    </div>
                   </div>
                 ))}
             </div>

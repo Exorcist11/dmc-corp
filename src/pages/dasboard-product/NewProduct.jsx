@@ -77,7 +77,6 @@ export default function NewProduct() {
   const mdParser = new MarkdownIt(/* Markdown-it options */);
 
   function handleEditorChange({ html, text }) {
-    // console.log("handleEditorChange: ", html, text);
     setProduct({
       ...product,
       description_markdown: text,
@@ -129,7 +128,7 @@ export default function NewProduct() {
               title: "Thông báo",
               description: "Thêm mới sản phẩm thành công",
             });
-            console.log(res.data)
+            console.log(res.data);
           })
           .catch((err) => console.log(err));
       }

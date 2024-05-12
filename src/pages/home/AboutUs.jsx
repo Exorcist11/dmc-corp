@@ -1,6 +1,6 @@
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Separator } from "@/components/ui/separator";
 
 export default function AboutUs() {
   useEffect(() => {
@@ -152,7 +152,7 @@ export default function AboutUs() {
               <div
                 key={index}
                 onClick={() => navigate(`/${item.path}`)}
-                className="rounded-xl group relative cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30"
+                className=" rounded-xl group relative cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30"
               >
                 <div className="h-full">
                   <img

@@ -22,6 +22,9 @@ import ProductHistory from "@/pages/account/ProductHistory";
 import OrderProduct from "@/pages/order/OrderProduct";
 import SearchResult from "@/pages/home/SearchResult";
 import AboutUs from "@/pages/home/AboutUs";
+import NewPost from "@/pages/dashboard/NewPost";
+import Blog from "@/pages/home/Blog";
+import OrderSuccess from "@/pages/order/OrderSuccess";
 
 const publicRoute = [
   { path: "/login", page: LoginPage },
@@ -29,11 +32,13 @@ const publicRoute = [
   { path: "/register", page: RegisterPage },
   { path: "/forget", page: ForgetPasswordPage },
   { path: "/product/:path", page: ProductCategory },
-  { path: "/:path_product", page: ProductDetail },
   { path: "/error", page: Page404 },
+  { path: "/:path_product", page: ProductDetail },
   { path: "/order/product", page: OrderProduct },
   { path: "/search", page: SearchResult },
   { path: "/about-us", page: AboutUs },
+  { path: "/blog", page: Blog },
+  { path: "/order-success", page: OrderSuccess },
   // { path: "/account", page: UserPage },
 ];
 
@@ -54,6 +59,8 @@ const adminRoute = [
   { path: "/dashboard/:path", page: ListProduct },
   { path: "/dashboard/:path/:product_id", page: InfoProduct, layout: null },
   { path: "/dashboard/order", page: OrderManager },
+  { path: "/dashboard/pending-order", page: OrderManager },
   { path: "/dashboard/order/:order_id", page: OrderView },
+  { path: "/dashboard/news", page: NewPost },
 ];
 export { publicRoute, accountRoute, adminRoute };
