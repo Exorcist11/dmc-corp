@@ -14,13 +14,10 @@ export default function CustomerOrder() {
   const rowPerPage = 3;
   const [startIndex, setStartIndex] = useState(0);
   const [endIndex, setEndIndex] = useState(rowPerPage);
+  const account = JSON.parse(localStorage.getItem("account"));
   const getOrder = async () => {
     await axios
-      .get(
-        `http://127.0.0.1:9999/get_order_by_customer/${localStorage.getItem(
-          "user_id"
-        )}`
-      )
+      .get(`http://127.0.0.1:9999/get_order_by_customer/${account.account_id}`)
       .then((res) => setOrder(res.data.record))
       .catch((err) => console.log(err));
   };

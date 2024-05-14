@@ -7,6 +7,9 @@ import Dashboard from "./components/Layout/Dashboard";
 import Page404 from "./pages/page-404/Page404";
 
 function App() {
+  const account = JSON.parse(localStorage.getItem("account"));
+  console.log(account);
+
   return (
     <div>
       <Routes>
@@ -33,9 +36,13 @@ function App() {
               key={index}
               path={route?.path}
               element={
-                <Layout>
-                  <Page />
-                </Layout>
+                account?.role_id === "R1" ? (
+                  <Layout>
+                    <Page />
+                  </Layout>
+                ) : (
+                  <Page404 />
+                )
               }
             />
           );
@@ -49,9 +56,13 @@ function App() {
               key={index}
               path={route?.path ? route?.path : "/err"}
               element={
-                <Layout>
-                  <Page />
-                </Layout>
+                account?.role_id === "R2" ? (
+                  <Layout>
+                    <Page />
+                  </Layout>
+                ) : (
+                  <Page404 />
+                )
               }
             />
           );

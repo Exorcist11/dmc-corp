@@ -6,11 +6,17 @@ import {
   SlUser,
   SlDiamond,
   SlNotebook,
-  SlRocket,
+  SlSettings,
   SlDrawer,
   SlChart,
+  SlLogout,
 } from "react-icons/sl";
 import { useNavigate } from "react-router-dom";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 export default function Dashboard({ children }) {
   const [selectedAppMenu, setSelectedAppMenu] = useState(null);
@@ -83,7 +89,26 @@ export default function Dashboard({ children }) {
     <div className="flex flex-col h-full">
       <div className="h-16 border-b-[1px] flex justify-between px-10 items-center fixed top-0 z-30 left-0 right-0 bg-white">
         <div>DMC-Corp</div>
-        <div>Trang quản lý</div>
+        <div className="flex items-center gap-3">
+          <h1>Trang quản lý</h1>
+          <Popover>
+            <PopoverTrigger>
+              <SlSettings />
+            </PopoverTrigger>
+            <PopoverContent>
+              <div
+                className="flex gap-3 items-center cursor-pointer hover:bg-[#edf1f5] px-6 py-3"
+                onClick={() => {
+                  localStorage.clear();
+                  window.location.href = "/";
+                }}
+              >
+                <SlLogout />
+                <h1>Đăng xuất</h1>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
       </div>
       <div className="flex mt-16 h-full">
         <div className=" fixed w-1/6 h-full flex flex-col bg-white border-r shadow-sm">

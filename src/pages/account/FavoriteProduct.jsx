@@ -14,6 +14,7 @@ export default function FavoriteProduct() {
   const rowPerPage = 10;
   const [startIndex, setStartIndex] = useState(0);
   const [endIndex, setEndIndex] = useState(rowPerPage);
+  const account = JSON.parse(localStorage.getItem("account"));
 
   useEffect(() => {
     document.title = "Sản phẩm yêu thích";
@@ -23,9 +24,7 @@ export default function FavoriteProduct() {
     const getProduct = async () => {
       await axios
         .get(
-          `http://127.0.0.1:9999/get_wish_list/${localStorage.getItem(
-            "user_id"
-          )}`
+          `http://127.0.0.1:9999/get_wish_list/${account.account_id}`
         )
         .then((res) => setProduct(res.data.record))
         .catch((err) => console.log(err));

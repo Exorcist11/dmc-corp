@@ -31,12 +31,12 @@ export default function LoginPage() {
           account
         );
         if (response.data.status === 200) {
-          if (response.data.info.role_id == "R1") {
-            localStorage.setItem("user_id", response?.data.info.account_id);
-            localStorage.setItem("user_name", response?.data.info.username);
+          localStorage.setItem("account", JSON.stringify(response?.data.info));
+          const account = JSON.parse(localStorage.getItem("account"));
+          if (account.role_id === "R1") {
             navigate("/");
           } else {
-            navigate('/dashboard')
+            navigate("/dashboard");
           }
         } else {
           setErrors(response.data.message);

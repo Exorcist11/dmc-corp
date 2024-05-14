@@ -12,7 +12,6 @@ import ListProduct from "@/pages/dashboard/ListProduct";
 import InfoProduct from "@/pages/dasboard-product/InfoProduct";
 import ProductCategory from "@/pages/product-info/ProductCategory";
 import ProductDetail from "@/pages/product-info/ProductDetail";
-import Page404 from "@/pages/page-404/Page404";
 import CustomerOrder from "@/pages/order/CustomerOrder";
 import OrderDetail from "@/pages/order/OrderDetail";
 import OrderManager from "@/pages/dashboard/OrderManager";
@@ -25,6 +24,7 @@ import AboutUs from "@/pages/home/AboutUs";
 import NewPost from "@/pages/dashboard/NewPost";
 import Blog from "@/pages/home/Blog";
 import OrderSuccess from "@/pages/order/OrderSuccess";
+import ReviewProduct from "@/pages/product-info/ReviewProduct";
 
 const publicRoute = [
   { path: "/login", page: LoginPage },
@@ -32,7 +32,6 @@ const publicRoute = [
   { path: "/register", page: RegisterPage },
   { path: "/forget", page: ForgetPasswordPage },
   { path: "/product/:path", page: ProductCategory },
-  { path: "/error", page: Page404 },
   { path: "/:path_product", page: ProductDetail },
   { path: "/order/product", page: OrderProduct },
   { path: "/search", page: SearchResult },
@@ -49,6 +48,7 @@ const accountRoute = [
   { path: "/order", page: CustomerOrder },
   { path: "/order/:order_id", page: OrderDetail },
   { path: "/account/history", page: ProductHistory },
+  { path: "/order-review", page: ReviewProduct },
 ];
 
 const adminRoute = [

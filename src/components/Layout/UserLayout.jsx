@@ -7,7 +7,6 @@ import {
   SlHeart,
   SlEye,
   SlLogout,
-  SlTag,
   SlDrawer,
 } from "react-icons/sl";
 import React from "react";

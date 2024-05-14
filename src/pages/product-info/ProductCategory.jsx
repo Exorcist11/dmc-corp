@@ -26,10 +26,9 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-
-
 export default function ProductCategory() {
   const [products, setProducts] = useState([]);
+  const account = JSON.parse(localStorage.getItem("account"));
 
   const navigate = useNavigate();
   const { path } = useParams();
@@ -110,7 +109,7 @@ export default function ProductCategory() {
     await axios
       .post("http://127.0.0.1:9999/add_to_cart", {
         product_id: product_id,
-        account_id: localStorage.getItem("user_id"),
+        account_id: account.account_id,
       })
       .then((res) => console.log(res))
       .catch((err) => console.log(err));

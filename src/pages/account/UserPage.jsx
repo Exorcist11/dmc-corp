@@ -19,6 +19,7 @@ export default function UserPage() {
     document.title = "Thông tin cá nhân";
   });
   const { toast } = useToast();
+  const account = JSON.parse(localStorage.getItem("account"));
 
   const [date, setDate] = useState("");
   const [data, setData] = useState({
@@ -34,7 +35,7 @@ export default function UserPage() {
     const getInfomation = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:9999/settings/${localStorage.getItem("user_id")}`
+          `http://127.0.0.1:9999/settings/${account.account_id}`
         );
         setData(response.data.infor);
       } catch (error) {
@@ -50,7 +51,7 @@ export default function UserPage() {
     event.preventDefault();
     await axios
       .patch(
-        `http://127.0.0.1:9999/settings/${localStorage.getItem("user_id")}`,
+        `http://127.0.0.1:9999/settings/${account.account_id}`,
         data
       )
       .then(() =>
@@ -74,7 +75,7 @@ export default function UserPage() {
         <Input
           className=""
           readOnly={true}
-          value={localStorage.getItem("user_name")}
+          value={account.username}
         />
       </div>
 

@@ -27,30 +27,26 @@ export default function Homepage() {
   const menuCategory = [
     {
       name: "Đồng hồ",
-      linkImg: "https://curnonwatch.com/wp-content/uploads/2024/03/1-1.jpg",
+      linkImg: "/public/watch-category.jpg",
       navTo: "dong-ho",
     },
     {
       name: "Vòng tay",
       linkImg:
-        "https://curnonwatch.com/wp-content/uploads/2024/03/Vo%CC%80ng-tay-1.png",
+        "/public/category-vong-tay.png",
       navTo: "vong-tay",
     },
     {
       name: "Dây chuyền",
-      linkImg: "https://curnonwatch.com/wp-content/uploads/2024/03/4.png",
+      linkImg: "/public/category-vong-day-chuyen.png",
       navTo: "day-chuyen",
     },
     {
       name: "Nhẫn",
-      linkImg: "https://curnonwatch.com/wp-content/uploads/2024/03/5.png",
+      linkImg: "/public/category-nhan.png",
       navTo: "nhan",
     },
-    {
-      name: "Quà tặng",
-      linkImg: "https://curnonwatch.com/wp-content/uploads/2024/03/6.png",
-      navTo: "qua-tang",
-    },
+    
   ];
   
   function getRandomProduct(arr, count) {
@@ -83,7 +79,7 @@ export default function Homepage() {
           </Button>
         </div>
         <img
-          src="https://curnonwatch.com/wp-content/uploads/2024/03/14-1.jpg"
+          src="/public/Home-Banner.jpg"
           alt="banner"
           className="col-span-2"
           loading="lazy"
@@ -147,19 +143,19 @@ export default function Homepage() {
           </h3>
         </div>
         <img
-          src="https://curnonwatch.com/wp-content/uploads/2024/01/Cover-1-2048x2048.jpg"
+          src="/public/home-colecttion-1.jpg"
           alt=""
         />
         <img
-          src="https://curnonwatch.com/wp-content/uploads/2024/01/design_all-ngang-scaled-e1705391247827.jpg"
+          src="/public/home-colection-2.jpg"
           alt=""
         />
         <img
-          src="https://curnonwatch.com/wp-content/uploads/2024/01/IG.jpg"
+          src="/public/home-colection-3.jpg"
           alt=""
         />
         <img
-          src="https://curnonwatch.com/wp-content/uploads/2024/01/Cover-1-SJ-scaled-e1705391904636.jpg"
+          src="/public/home-colection-4.jpg"
           alt=""
         />
         <div className="flex items-end justify-end p-10 cursor-pointer">
@@ -197,10 +193,11 @@ export default function Homepage() {
           ))}
         </div>
         <img
-          src="https://curnonwatch.com/wp-content/uploads/2024/01/ANN9861-scaled-e1705394776499.jpg"
+          src="/public/home-girl.jpg"
           alt=""
         />
       </div>
+      
     </div>
   );
 }

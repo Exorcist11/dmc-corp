@@ -12,7 +12,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export default function Cart() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [cart, setCart] = useState({
     account_id: "",
     cart_id: "",
@@ -21,15 +21,13 @@ export default function Cart() {
     update_at: "",
     product: [],
   });
+  const account = JSON.parse(localStorage.getItem("account"));
+
   useEffect(() => {
     const getCart = async () => {
-      if (localStorage.getItem("user_id")) {
+      if (account) {
         await axios
-          .get(
-            `http://127.0.0.1:9999/settings_cart/${localStorage.getItem(
-              "user_id"
-            )}`
-          )
+          .get(`http://127.0.0.1:9999/settings_cart/${account.account_id}`)
           .then((res) => setCart(res.data))
           .catch((err) => console.log(err));
       } else {
@@ -37,7 +35,7 @@ export default function Cart() {
       }
     };
     getCart();
-  }, []);
+  }, [account.account_id]);
 
   const handleRemove = async (product_id, cart_id) => {
     try {
@@ -248,7 +246,11 @@ export default function Cart() {
 
           <SheetFooter className="">
             <SheetClose asChild>
-              <Button className="w-full" type="submit" onClick={() => navigate('/order/product')}>
+              <Button
+                className="w-full"
+                type="submit"
+                onClick={() => navigate("/order/product")}
+              >
                 Thanh toán ngay
               </Button>
             </SheetClose>

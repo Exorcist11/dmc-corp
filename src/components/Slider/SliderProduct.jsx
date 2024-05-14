@@ -27,7 +27,7 @@ export default function SliderProduct({ title }) {
     { name: "Dây chuyền", value: "day-chuyen" },
     { name: "Nhẫn", value: "nhan" },
   ];
-
+  const account = JSON.parse(localStorage.getItem("account"));
   const getProduct = React.useCallback(async () => {
     if (path === "best") {
       await axios
@@ -50,7 +50,7 @@ export default function SliderProduct({ title }) {
     await axios
       .post("http://127.0.0.1:9999/add_to_cart", {
         product_id: product_id,
-        account_id: localStorage.getItem("user_id"),
+        account_id: account.account_id,
       })
       .then((res) => console.log(res))
       .catch((err) => console.log(err));

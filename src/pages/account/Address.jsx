@@ -42,6 +42,7 @@ export default function Address() {
   const rowPerPage = 3;
   const [startIndex, setStartIndex] = useState(0);
   const [endIndex, setEndIndex] = useState(rowPerPage);
+  const account = JSON.parse(localStorage.getItem("account"));
   const getProvince = async () => {
     await axios
       .get("http://127.0.0.1:9999/provinces")
@@ -50,9 +51,9 @@ export default function Address() {
   };
 
   const getAddress = async () => {
-    if (localStorage.getItem("user_id")) {
+    if (account) {
       await axios
-        .get(`http://127.0.0.1:9999/address/${localStorage.getItem("user_id")}`)
+        .get(`http://127.0.0.1:9999/address/${account.account_id}`)
         .then((res) => setAddress(res.data.list_address))
         .catch((err) => console.log(err));
     }
@@ -81,10 +82,10 @@ export default function Address() {
   }, []);
 
   useEffect(() => {
-    if (localStorage.getItem("user_id")) {
+    if (account.account_id) {
       getAddress();
     }
-  }, [localStorage.getItem("user_id")]);
+  }, [account.account_id]);
 
   useEffect(() => {
     if (provinceID) {
@@ -101,7 +102,7 @@ export default function Address() {
   const handleClick = async () => {
     await axios
       .post(
-        `http://127.0.0.1:9999/address/${localStorage.getItem("user_id")}`,
+        `http://127.0.0.1:9999/address/${account.account_id}`,
         {
           full_name: input.full_name,
           phone_number: input.phone_number,

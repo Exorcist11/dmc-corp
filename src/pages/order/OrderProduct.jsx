@@ -32,6 +32,7 @@ export default function OrderProduct() {
     province: "",
     ward: "",
   });
+  const account = JSON.parse(localStorage.getItem("account"));
   const [lstAddress, setLstAddress] = useState([]);
   const [payment, setPayment] = useState("cash");
 
@@ -43,13 +44,9 @@ export default function OrderProduct() {
 
   useEffect(() => {
     const listAddress = async () => {
-      if (localStorage.getItem("user_id")) {
+      if (account) {
         await axios
-          .get(
-            `http://127.0.0.1:9999/default_address/${localStorage.getItem(
-              "user_id"
-            )}`
-          )
+          .get(`http://127.0.0.1:9999/default_address/${account.account_id}`)
           .then((res) => setAddress(res.data.list_address[0]))
           .catch((err) => console.log(err));
       }
@@ -59,13 +56,9 @@ export default function OrderProduct() {
 
   useEffect(() => {
     const getCart = async () => {
-      if (localStorage.getItem("user_id")) {
+      if (account) {
         await axios
-          .get(
-            `http://127.0.0.1:9999/settings_cart/${localStorage.getItem(
-              "user_id"
-            )}`
-          )
+          .get(`http://127.0.0.1:9999/settings_cart/${account.account_id}`)
           .then((res) => setCart(res.data))
           .catch((err) => console.log(err));
       } else {
@@ -78,7 +71,7 @@ export default function OrderProduct() {
   useEffect(() => {
     const getAddress = async () => {
       await axios
-        .get(`http://127.0.0.1:9999/address/${localStorage.getItem("user_id")}`)
+        .get(`http://127.0.0.1:9999/address/${account.account_id}`)
         .then((res) => setLstAddress(res.data.list_address))
         .catch((err) => console.log(err));
     };

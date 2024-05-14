@@ -32,7 +32,7 @@ import { Button } from "../ui/button";
 export default function Header() {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
-
+  const account = JSON.parse(localStorage.getItem("account"));
   const menus = [
     { name: "Đồng hồ", link: "dong-ho" },
     { name: "Vòng tay", link: "vong-tay" },
@@ -133,9 +133,7 @@ export default function Header() {
           <div
             className="flex items-center gap-2 cursor-pointer"
             onClick={() =>
-              localStorage.getItem("user_name")
-                ? navigate(`/account`)
-                : navigate("/login")
+              account ? navigate(`/account`) : navigate("/login")
             }
           >
             <TooltipProvider>
@@ -144,7 +142,7 @@ export default function Header() {
                   <SlUser />
                 </TooltipTrigger>
                 <TooltipContent>
-                  {!localStorage.getItem("user_name") ? (
+                  {!account ? (
                     <h1>Đăng nhập</h1>
                   ) : (
                     <h1>Tài khoản</h1>

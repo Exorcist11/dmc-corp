@@ -30,6 +30,7 @@ export default function SearchResult() {
   const searchValue = search.get("value");
   const navigate = useNavigate();
   const itemPerPage = 8;
+  const account = JSON.parse(localStorage.getItem("account"));
   const [startIndex, setStartIndex] = useState(0);
   const [endIndex, setEndIndex] = useState(itemPerPage);
   useEffect(() => {
@@ -53,7 +54,7 @@ export default function SearchResult() {
     await axios
       .post("http://127.0.0.1:9999/add_to_cart", {
         product_id: product_id,
-        account_id: localStorage.getItem("user_id"),
+        account_id: account.account_id,
       })
       .then((res) => console.log(res))
       .catch((err) => console.log(err));

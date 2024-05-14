@@ -38,6 +38,8 @@ export default function ProductDetail() {
     status: "",
     action: "",
   });
+  const [reviews, setReviews] = useState([]);
+  const account = JSON.parse(localStorage.getItem("account"));
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -73,12 +75,23 @@ export default function ProductDetail() {
     };
     getNewProduct();
   }, []);
+  console.log(product);
+
+  useEffect(() => {
+    const getReview = async () => {
+      await axios
+        .get(`http://127.0.0.1:9999/get_review/${product.product_id}`)
+        .then((res) => setReviews(res.data.record))
+        .catch((err) => console.log(err));
+    };
+    getReview();
+  }, [product.product_id]);
 
   useEffect(() => {
     const getFavorite = async () => {
       await axios
         .post("http://127.0.0.1:9999/favorite_product", {
-          account_id: localStorage.getItem("user_id"),
+          account_id: account?.account_id,
           product_id: product?.product_id,
         })
         .then((res) => setFavorite(res.data));
@@ -89,7 +102,7 @@ export default function ProductDetail() {
   const handleRemoteFavorite = async (product_id) => {
     await axios
       .post("http://127.0.0.1:9999/delete_wish_list", {
-        account_id: localStorage.getItem("user_id"),
+        account_id: account?.account_id,
         product_id: product_id,
       })
       .then(() => setFavorite({ ...favorite, action: false }))
@@ -99,7 +112,7 @@ export default function ProductDetail() {
   const handleAddFavorite = async (product_id) => {
     await axios
       .post("http://127.0.0.1:9999/add_to_wishlist", {
-        account_id: localStorage.getItem("user_id"),
+        account_id: account?.account_id,
         product_id: product_id,
       })
       .then(() => setFavorite({ ...favorite, action: true }))
@@ -396,46 +409,48 @@ export default function ProductDetail() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-5 px-16 py-10 border-b">
-        <Carousel className="flex flex-col gap-10">
-          <div className="flex justify-between items-center">
-            <h1 className="text-4xl uppercase font-semibold">
-              Đánh giá của khách hàng
-            </h1>
-            <div className="flex gap-3 items-center">
-              <CarouselPrevious className="static translate-y-0" />
-              <CarouselNext className="static translate-y-0" />
+      {reviews.length > 0 ? (
+        <div className="flex flex-col gap-5 px-16 py-10 border-b">
+          <Carousel className="flex flex-col gap-10">
+            <div className="flex justify-between items-center">
+              <h1 className="text-4xl uppercase font-semibold">
+                Đánh giá của khách hàng
+              </h1>
+              <div className="flex gap-3 items-center">
+                <CarouselPrevious className="static translate-y-0" />
+                <CarouselNext className="static translate-y-0" />
+              </div>
             </div>
-          </div>
-          <CarouselContent>
-            {Array.from({ length: 5 }).map((_, index) => (
-              <CarouselItem key={index} className="basis-1/4">
-                <Card className="h-56 bg-[#f9f7f5]">
-                  <CardContent className="p-6 flex flex-col gap-3 ">
-                    <Ratings
-                      rating={4.5}
-                      totalstars={5}
-                      size={14}
-                      fill={true.toString()}
-                      variant="yellow"
-                    />
-                    <h1 className="font-bold">Amazing</h1>
-                    <p className="text-sm">
-                      Với mặt số tối giản, chiếc đồng hồ này dễ dàng kết hợp với
-                      nhiều phong cách trang phục khác nhau, tạo sự linh hoạt
-                      cho người sử dụng.
-                    </p>
-                    <div className="flex justify-between items-center text-xs">
-                      <h3 className="font-medium">Nguyễn Xuân Dũng</h3>
-                      <h3 className="text-[#807d7c]">28/09/2023</h3>
-                    </div>
-                  </CardContent>
-                </Card>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
-      </div>
+            <CarouselContent>
+              {reviews.map((item, index) => (
+                <CarouselItem key={index} className="basis-1/4">
+                  <Card className="h-56 bg-[#f9f7f5]">
+                    <CardContent className="p-6 flex flex-col gap-3 justify-between h-full">
+                      <div className="flex flex-col gap-3">
+                        <Ratings
+                          rating={item.rate}
+                          totalstars={5}
+                          size={14}
+                          fill={true.toString()}
+                          variant="yellow"
+                        />
+                        <h1 className="font-bold">{item.title}</h1>
+                      </div>
+                      <p className="text-sm">{item?.content}</p>
+                      <div className="flex justify-between items-center text-xs">
+                        <h3 className="font-medium">{item?.username}</h3>
+                        <h3 className="text-[#807d7c]">{item?.time}</h3>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+        </div>
+      ) : (
+        ""
+      )}
 
       <div className="flex flex-col gap-5 px-16 py-10 border-b">
         <Carousel plugins={[plugin.current]} className="flex flex-col gap-10">
@@ -462,9 +477,9 @@ export default function ProductDetail() {
                     {/* Đổi img */}
                     {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent  group-hover:from-black/70 group-hover:via-black/60 group-hover:to-black/70"></div> */}
                     <div className="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-end px-9 text-center transition-all duration-300 group-hover:translate-y-0 pb-5 font-semibold">
-                      <Button className="rounded-full bg-white  hover:shadow text-black py-2 px-3.5 font-com text-xs capitalize flex gap-1 justify-center items-center">
+                      <button className="rounded-full bg-white  hover:shadow text-black py-2 px-3.5 font-com text-xs capitalize flex gap-1 justify-center items-center">
                         Thêm vào giỏ hàng <LiaCartPlusSolid size={18} />
-                      </Button>
+                      </button>
                     </div>
                   </div>
 
