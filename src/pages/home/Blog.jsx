@@ -1,5 +1,5 @@
 import Autoplay from "embla-carousel-autoplay";
-import React from "react";
+import React, { useEffect } from "react";
 import { CiCalendar, CiUser } from "react-icons/ci";
 import {
   Carousel,
@@ -12,6 +12,9 @@ export default function Blog() {
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true })
   );
+  useEffect(() => {
+    document.title = 'Tin tức sản phẩm'
+  })
   return (
     <div className="flex flex-col gap-5">
       <div className="relative">

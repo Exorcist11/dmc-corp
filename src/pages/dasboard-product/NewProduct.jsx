@@ -11,7 +11,7 @@ import {
 
 import { SlCloudUpload } from "react-icons/sl";
 import { IoClose } from "react-icons/io5";
-import { useToast } from "@/components/ui/use-toast";
+import toast from "react-hot-toast";
 
 import MarkdownIt from "markdown-it";
 import MdEditor from "react-markdown-editor-lite";
@@ -24,7 +24,6 @@ export default function NewProduct() {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [categories, setCategories] = useState([]);
   const [seller, setSeller] = useState([]);
-  const { toast } = useToast();
 
   const [product, setProduct] = useState({
     product_id: "",
@@ -123,14 +122,13 @@ export default function NewProduct() {
               "Content-Type": "multipart/form-data",
             },
           })
-          .then((res) => {
-            toast({
-              title: "Thông báo",
-              description: "Thêm mới sản phẩm thành công",
-            });
-            console.log(res.data);
+          .then(() => {
+            toast.success("Thêm mới sản phẩm thành công");
           })
+          .then(() => window.location.reload())
           .catch((err) => console.log(err));
+      } else {
+        toast.error("Lỗi khi thêm mới");
       }
     } catch (error) {
       console.error(error);
@@ -189,6 +187,7 @@ export default function NewProduct() {
               style={{ height: "400px" }}
               renderHTML={(text) => mdParser.render(text)}
               onChange={handleEditorChange}
+              view={{ menu: true, md: true, html: false }}
             />
           </div>
 

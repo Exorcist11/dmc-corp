@@ -17,6 +17,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Toaster } from "react-hot-toast";
 
 export default function Dashboard({ children }) {
   const [selectedAppMenu, setSelectedAppMenu] = useState(null);
@@ -79,7 +80,7 @@ export default function Dashboard({ children }) {
       icon: <SlNotebook />,
       action: [
         { name: "Thêm mới bài viết", link: "/dashboard/news" },
-        { name: "Quản lý bài viết", link: "/dashboard/news" },
+        // { name: "Quản lý bài viết", link: "/dashboard/news" },
       ],
     },
     // { name: "Nhà cung cấp", icon: <SlRocket /> },
@@ -87,6 +88,7 @@ export default function Dashboard({ children }) {
 
   return (
     <div className="flex flex-col h-full">
+      <Toaster position="top-center" reverseOrder={false} />
       <div className="h-16 border-b-[1px] flex justify-between px-10 items-center fixed top-0 z-30 left-0 right-0 bg-white">
         <div>DMC-Corp</div>
         <div className="flex items-center gap-3">

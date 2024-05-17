@@ -130,14 +130,24 @@ export default function Cart() {
 
   return (
     <div className="h-full flex flex-col justify-between">
-      <div className="overflow-auto hover:overflow-auto">
-        <SheetHeader className="border-b py-4">
-          <SheetTitle className="uppercase">Giỏ hàng</SheetTitle>
-        </SheetHeader>
+      {cart.product.length < 1 ? (
+        <div className="h-full">
+          <SheetHeader className="border-b py-4">
+            <SheetTitle className="uppercase">Giỏ hàng</SheetTitle>
+          </SheetHeader>
+          <div className="h-full flex flex-col items-center justify-center ">
+            <img src="/public/cart-empty.png" alt="cart-empty" />
+            <h1>Giỏ hàng trống</h1>
+          </div>
+        </div>
+      ) : (
+        <div className="h-full flex flex-col justify-between">
+          <div className="overflow-auto hover:overflow-auto">
+            <SheetHeader className="border-b py-4">
+              <SheetTitle className="uppercase">Giỏ hàng</SheetTitle>
+            </SheetHeader>
 
-        {cart.product.length < 1
-          ? "Giỏ hàng trống"
-          : cart.product?.map((item, index) => (
+            {cart.product?.map((item, index) => (
               <div className="py-3 w-full flex flex-col gap-3 px-3" key={index}>
                 <div className="grid grid-cols-3">
                   <div className="col-span-1">
@@ -204,57 +214,57 @@ export default function Cart() {
                 </div>
               </div>
             ))}
-      </div>
-
-      {cart.product.length < 1 ? (
-        ""
-      ) : (
-        <div className="flex flex-col gap-2">
-          <div className="flex flex-col gap-3 border-t pt-3">
-            <div className="w-full text-sm">
-              <div className="flex items-center justify-between">
-                <h1>Tạm tính</h1>
-                <h1>{parseInt(cart.cart_total).toLocaleString("vi-VN")} VND</h1>
-              </div>
-            </div>
-
-            <div className="w-full text-sm">
-              <div className="flex items-center justify-between">
-                <h1>Giao hàng</h1>
-                <h1>
-                  {cart.cart_total > 700000
-                    ? "Giao hàng miễn phí"
-                    : `30.000 VND`}
-                </h1>
-              </div>
-            </div>
-
-            <div className="w-full">
-              <div className="flex items-center justify-between font-medium">
-                <h1>Tổng</h1>
-                <h1>
-                  {cart.cart_total > 700000
-                    ? parseInt(cart.cart_total).toLocaleString("vi-VN")
-                    : `${parseInt(cart.cart_total + 30000).toLocaleString(
-                        "vi-VN"
-                      )}`}{" "}
-                  VND
-                </h1>
-              </div>
-            </div>
           </div>
 
-          <SheetFooter className="">
-            <SheetClose asChild>
-              <Button
-                className="w-full"
-                type="submit"
-                onClick={() => navigate("/order/product")}
-              >
-                Thanh toán ngay
-              </Button>
-            </SheetClose>
-          </SheetFooter>
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-3 border-t pt-3">
+              <div className="w-full text-sm">
+                <div className="flex items-center justify-between">
+                  <h1>Tạm tính</h1>
+                  <h1>
+                    {parseInt(cart.cart_total).toLocaleString("vi-VN")} VND
+                  </h1>
+                </div>
+              </div>
+
+              <div className="w-full text-sm">
+                <div className="flex items-center justify-between">
+                  <h1>Giao hàng</h1>
+                  <h1>
+                    {cart.cart_total > 700000
+                      ? "Giao hàng miễn phí"
+                      : `30.000 VND`}
+                  </h1>
+                </div>
+              </div>
+
+              <div className="w-full">
+                <div className="flex items-center justify-between font-medium">
+                  <h1>Tổng</h1>
+                  <h1>
+                    {cart.cart_total > 700000
+                      ? parseInt(cart.cart_total).toLocaleString("vi-VN")
+                      : `${parseInt(cart.cart_total + 30000).toLocaleString(
+                          "vi-VN"
+                        )}`}{" "}
+                    VND
+                  </h1>
+                </div>
+              </div>
+            </div>
+
+            <SheetFooter className="">
+              <SheetClose asChild>
+                <Button
+                  className="w-full"
+                  type="submit"
+                  onClick={() => navigate("/order/product")}
+                >
+                  Thanh toán ngay
+                </Button>
+              </SheetClose>
+            </SheetFooter>
+          </div>
         </div>
       )}
     </div>

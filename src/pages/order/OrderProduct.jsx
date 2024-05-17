@@ -211,13 +211,23 @@ export default function OrderProduct() {
                 <RadioGroup
                   className="w-full"
                   defaultValue={lstAddress[0]?.address_id}
-                  onValueChange={(value) => console.log(value)}
                 >
                   {lstAddress?.map((item, index) => (
                     <div key={index} className="flex items-center gap-3 w-full">
                       <RadioGroupItem
                         value={item?.address_id}
                         id={item?.address_id}
+                        onClick={() => {
+                          setAddress({
+                            address_id: item?.address_id,
+                            district: item?.district,
+                            full_name: item?.full_name,
+                            note: item?.note,
+                            phone_number: item?.phone_number,
+                            province: item?.province,
+                            ward: item?.ward,
+                          });
+                        }}
                       />
                       <div className="border-[1px] px-4 py-2 rounded-lg text-sm flex flex-col gap-2 w-4/5">
                         <div className="flex justify-between">

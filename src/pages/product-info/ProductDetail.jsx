@@ -30,6 +30,12 @@ import Autoplay from "embla-carousel-autoplay";
 import { LiaCartPlusSolid } from "react-icons/lia";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import toast from "react-hot-toast";
+import MarkdownIt from "markdown-it";
+import MdEditor from "react-markdown-editor-lite";
+import "react-markdown-editor-lite/lib/index.css";
+
+const mdParser = new MarkdownIt(/* Markdown-it options */);
 
 export default function ProductDetail() {
   const [product, setProduct] = useState([]);
@@ -75,7 +81,6 @@ export default function ProductDetail() {
     };
     getNewProduct();
   }, []);
-  console.log(product);
 
   useEffect(() => {
     const getReview = async () => {
@@ -119,6 +124,24 @@ export default function ProductDetail() {
       .catch((err) => console.log(err));
   };
 
+  const handleBuy = async (product_id, account_id) => {
+    await axios
+      .post("http://127.0.0.1:9999/add_to_cart", { product_id, account_id })
+      .then(() => {
+        navigate("/order/product");
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleAddCart = async (product_id, account_id) => {
+    await axios
+      .post("http://127.0.0.1:9999/add_to_cart", { product_id, account_id })
+      .then(() => {
+        toast.success("Thêm mới sản phẩm thành công!");
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div className="flex flex-col">
       <div className="px-10 py-5">
@@ -129,7 +152,7 @@ export default function ProductDetail() {
             </BreadcrumbItem>
             <BreadcrumbSeparator>/</BreadcrumbSeparator>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/components">
+              <BreadcrumbLink href={`/product/${product?.path_category}`}>
                 {product?.category}
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -224,11 +247,21 @@ export default function ProductDetail() {
               </div>
             </div>
             <div className="flex flex-col gap-4">
-              <Button className="rounded-none">Thanh toán ngay</Button>
+              <Button
+                className="rounded-none"
+                onClick={() =>
+                  handleBuy(product.product_id, account.account_id)
+                }
+              >
+                Thanh toán ngay
+              </Button>
               <div className="flex items-center gap-5">
                 <Button
                   className="rounded-none w-11/12 border-black"
                   variant="outline"
+                  onClick={() =>
+                    handleAddCart(product.product_id, account.account_id)
+                  }
                 >
                   Thêm giỏ hàng
                 </Button>
@@ -271,11 +304,12 @@ export default function ProductDetail() {
             <h1 className="uppercase font-semibold">Thông tin chi tiết</h1>
           </div>
           <div className="border-b pb-3 gap-2 flex flex-col py-4 justify-center items-center text-sm ">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: product?.description_display,
-              }}
-            ></div>
+            <MdEditor
+              style={{ height: "auto", border: 'none' }}
+              renderHTML={(text) => mdParser.render(text)}
+              value={product.description_markdown}
+              view={{ menu: false, md: false, html: true }}
+            />
           </div>
           <Tabs defaultValue="shipping" className="w-full mb-5">
             <div className="border-b gap-2 flex flex-col">

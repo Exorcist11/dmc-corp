@@ -136,6 +136,17 @@ export default function Customers() {
                     <TableCell>{invoice?.email}</TableCell>
                     <TableCell>{invoice?.phone_number}</TableCell>
                     <TableCell className="text-right">
+                      {role === "R1" ? (
+                        <>
+                          <label
+                            htmlFor="delete"
+                            className="hover:font-medium cursor-pointer hover:underline"
+                          >
+                            Set admin
+                          </label>{" "}
+                          |{" "}
+                        </>
+                      ) : null}
                       <DialogTrigger
                         onClick={() => handleView(invoice?.user_id)}
                         asChild

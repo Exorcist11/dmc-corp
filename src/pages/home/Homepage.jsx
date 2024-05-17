@@ -68,7 +68,7 @@ export default function Homepage() {
       <div className="grid grid-cols-3">
         <div className="col-span-1 flex flex-col justify-between p-20">
           <div className="flex flex-col items-center gap-3">
-            <h1 className="text-5xl ">DMC DIAMOND</h1>
+            <h1 className="text-5xl font-bold">DMC JEWELRY</h1>
             <h3 className="italic text-sm text-gray-500">
               Thời Gian và Phong Cách - Nâng Tầm Vẻ Đẹp Của Bạn
             </h3>
