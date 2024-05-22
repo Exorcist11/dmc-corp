@@ -25,6 +25,7 @@ import NewPost from "@/pages/dashboard/NewPost";
 import Blog from "@/pages/home/Blog";
 import OrderSuccess from "@/pages/order/OrderSuccess";
 import ReviewProduct from "@/pages/product-info/ReviewProduct";
+import AccountManager from "@/pages/dashboard/AccountManager";
 
 const publicRoute = [
   { path: "/login", page: LoginPage },
@@ -62,5 +63,6 @@ const adminRoute = [
   { path: "/dashboard/pending-order", page: OrderManager },
   { path: "/dashboard/order/:order_id", page: OrderView },
   { path: "/dashboard/news", page: NewPost },
+  { path: "/accounts", page: AccountManager },
 ];
 export { publicRoute, accountRoute, adminRoute };

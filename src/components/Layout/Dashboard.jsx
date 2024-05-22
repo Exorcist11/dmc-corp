@@ -40,6 +40,10 @@ export default function Dashboard({ children }) {
       icon: <SlUser />,
       action: [
         {
+          name: "Danh sách tài khoản",
+          link: '/accounts'
+        },
+        {
           name: "Tài khoản quản trị",
           link: "/customers/R2",
         },
