@@ -7,6 +7,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { SlEqualizer, SlShuffle } from "react-icons/sl";
+import toast from "react-hot-toast";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -111,7 +112,7 @@ export default function ProductCategory() {
         product_id: product_id,
         account_id: account.account_id,
       })
-      .then((res) => console.log(res))
+      .then(() => toast.success("Thêm mới sản phẩm thành công!"))
       .catch((err) => console.log(err));
   };
 

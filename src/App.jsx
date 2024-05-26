@@ -8,7 +8,6 @@ import Page404 from "./pages/page-404/Page404";
 
 function App() {
   const account = JSON.parse(localStorage.getItem("account"));
-  console.log(account);
 
   return (
     <div>

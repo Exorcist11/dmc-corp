@@ -1,6 +1,7 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { RxSlash, RxArchive } from "react-icons/rx";
 import { LiaCartPlusSolid, LiaShippingFastSolid } from "react-icons/lia";
+import toast from "react-hot-toast";
 
 import { PiShieldCheckLight } from "react-icons/pi";
 import { MdCurrencyExchange } from "react-icons/md";
@@ -56,7 +57,7 @@ export default function SearchResult() {
         product_id: product_id,
         account_id: account.account_id,
       })
-      .then((res) => console.log(res))
+      .then(() => toast.success("Thêm mới sản phẩm thành công!"))
       .catch((err) => console.log(err));
   };
   return (

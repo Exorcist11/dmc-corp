@@ -26,6 +26,8 @@ import Blog from "@/pages/home/Blog";
 import OrderSuccess from "@/pages/order/OrderSuccess";
 import ReviewProduct from "@/pages/product-info/ReviewProduct";
 import AccountManager from "@/pages/dashboard/AccountManager";
+import Payment from "@/components/VNPAY/Payment";
+import PaymentReturn from "@/pages/order/PaymentReturn";
 
 const publicRoute = [
   { path: "/login", page: LoginPage },
@@ -39,7 +41,8 @@ const publicRoute = [
   { path: "/about-us", page: AboutUs },
   { path: "/blog", page: Blog },
   { path: "/order-success", page: OrderSuccess },
-  // { path: "/account", page: UserPage },
+  { path: "/payment", page: Payment },
+  { path: "/payment_return", page: PaymentReturn },
 ];
 
 const accountRoute = [

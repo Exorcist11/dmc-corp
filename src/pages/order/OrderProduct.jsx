@@ -18,6 +18,7 @@ import {
 import { PiShieldCheckLight } from "react-icons/pi";
 import { MdCurrencyExchange } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { FaAmazonPay } from "react-icons/fa";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { BsPlusLg } from "react-icons/bs";
 
@@ -142,6 +143,18 @@ export default function OrderProduct() {
       });
   };
 
+  function generateCustomId(prefix) {
+    const timestamp = Math.floor(Date.now() / 1000).toString();
+
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let randomChars = "";
+    for (let i = 0; i < 6; i++) {
+      randomChars += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
+    return `${prefix}-${timestamp}-${randomChars}`;
+  }
+
   const handleAdd = async (product_id, account_id) => {
     await axios
       .post("http://127.0.0.1:9999/add_to_cart", { product_id, account_id })
@@ -170,15 +183,43 @@ export default function OrderProduct() {
   };
 
   const handleSubmit = async () => {
-    await axios
-      .post("http://127.0.0.1:9999/checkout_cart", {
-        cart_id: cart?.cart_id,
-        account_id: cart?.account_id,
-        address_id: address?.address_id,
-        payment: payment,
-      })
-      .then(() => navigate("/"))
-      .catch((err) => console.log(err));
+    if (payment === "vn-pay") {
+      const order_id = generateCustomId("ORDER");
+      await axios
+        .post("http://127.0.0.1:9999/create_payment", {
+          bank_code: "",
+          total: cart.cart_total,
+          cart_id: cart?.cart_id,
+          account_id: cart?.account_id,
+          address_id: address?.address_id,
+          order_id: order_id,
+        })
+        .then((response) => {
+          window.location.href = response.data.payment_url;
+          axios
+            .post("http://127.0.0.1:9999/checkout_cart", {
+              cart_id: cart?.cart_id,
+              account_id: cart?.account_id,
+              address_id: address?.address_id,
+              payment: "vn-pay",
+              order_id: order_id,
+            })
+            .catch((err) => console.log(err));
+        })
+        .catch((error) => {
+          console.error("There was an error creating the payment!", error);
+        });
+    } else {
+      await axios
+        .post("http://127.0.0.1:9999/checkout_cart", {
+          cart_id: cart?.cart_id,
+          account_id: cart?.account_id,
+          address_id: address?.address_id,
+          payment: payment,
+        })
+        .then(() => navigate("/"))
+        .catch((err) => console.log(err));
+    }
   };
   return (
     <div className="flex items-center w-full h-full">
@@ -275,6 +316,16 @@ export default function OrderProduct() {
               <CiCreditCard2 size={24} />
               <Label htmlFor="r2" className="cursor-pointer">
                 Thanh toán chuyển khoản
+              </Label>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-2 ">
+            <RadioGroupItem value="vn-pay" id="r3" />
+            <div className="flex items-center gap-3 border p-4 rounded-md w-72">
+              <FaAmazonPay size={24} />
+              <Label htmlFor="r3" className="cursor-pointer">
+                Thanh toán VNPAY
               </Label>
             </div>
           </div>

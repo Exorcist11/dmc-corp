@@ -7,6 +7,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import toast from "react-hot-toast";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from "axios";
@@ -52,7 +53,7 @@ export default function SliderProduct({ title }) {
         product_id: product_id,
         account_id: account.account_id,
       })
-      .then((res) => console.log(res))
+      .then(() => toast.success("Thêm mới sản phẩm thành công!"))
       .catch((err) => console.log(err));
   };
   return (

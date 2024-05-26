@@ -6,6 +6,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Ratings } from "@/components/ui/rating";
 import { useEffect, useState } from "react";
@@ -30,7 +31,6 @@ import Autoplay from "embla-carousel-autoplay";
 import { LiaCartPlusSolid } from "react-icons/lia";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import toast from "react-hot-toast";
 import MarkdownIt from "markdown-it";
 import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
@@ -44,6 +44,7 @@ export default function ProductDetail() {
     status: "",
     action: "",
   });
+  let defaultCart = [];
   const [reviews, setReviews] = useState([]);
   const account = JSON.parse(localStorage.getItem("account"));
 
@@ -111,17 +112,27 @@ export default function ProductDetail() {
         product_id: product_id,
       })
       .then(() => setFavorite({ ...favorite, action: false }))
+      .then(() =>
+        toast("Đã xoá sản phẩm khỏi yêu thích!", {
+          icon: "⭕",
+        })
+      )
       .catch((err) => console.log(err));
   };
 
   const handleAddFavorite = async (product_id) => {
-    await axios
-      .post("http://127.0.0.1:9999/add_to_wishlist", {
-        account_id: account?.account_id,
-        product_id: product_id,
-      })
-      .then(() => setFavorite({ ...favorite, action: true }))
-      .catch((err) => console.log(err));
+    if (account) {
+      await axios
+        .post("http://127.0.0.1:9999/add_to_wishlist", {
+          account_id: account?.account_id,
+          product_id: product_id,
+        })
+        .then(() => setFavorite({ ...favorite, action: true }))
+        .then(() => toast.success("Đã thêm sản phẩm vào yêu thích!"))
+        .catch((err) => console.log(err));
+    } else {
+      alert("hekpo");
+    }
   };
 
   const handleBuy = async (product_id, account_id) => {
@@ -133,14 +144,31 @@ export default function ProductDetail() {
       .catch((err) => console.log(err));
   };
 
-  const handleAddCart = async (product_id, account_id) => {
-    await axios
-      .post("http://127.0.0.1:9999/add_to_cart", { product_id, account_id })
-      .then(() => {
-        toast.success("Thêm mới sản phẩm thành công!");
-      })
-      .catch((err) => console.log(err));
+  const handleAddCart = async (product_id) => {
+    if (account) {
+      const account_id = account.account_id;
+      await axios
+        .post("http://127.0.0.1:9999/add_to_cart", { product_id, account_id })
+        .then(() => {
+          toast.success("Thêm mới sản phẩm thành công!");
+        })
+        .catch((err) => console.log(err));
+    } else {
+      let storage = localStorage.getItem("cart");
+      if (storage) {
+        defaultCart = JSON.parse(storage);
+      }
+
+      let item = defaultCart.find((c) => c.product.product_id === product_id);
+      if (item) {
+        item.quantity += 1;
+      } else {
+        defaultCart.push({ product: product, quantity: 1 });
+      }
+      localStorage.setItem("cart", JSON.stringify(defaultCart));
+    }
   };
+  // localStorage.removeItem("cart");
 
   return (
     <div className="flex flex-col">
@@ -259,9 +287,7 @@ export default function ProductDetail() {
                 <Button
                   className="rounded-none w-11/12 border-black"
                   variant="outline"
-                  onClick={() =>
-                    handleAddCart(product.product_id, account.account_id)
-                  }
+                  onClick={() => handleAddCart(product.product_id)}
                 >
                   Thêm giỏ hàng
                 </Button>
@@ -305,7 +331,7 @@ export default function ProductDetail() {
           </div>
           <div className="border-b pb-3 gap-2 flex flex-col py-4 justify-center items-center text-sm ">
             <MdEditor
-              style={{ height: "auto", border: 'none' }}
+              style={{ height: "auto", border: "none" }}
               renderHTML={(text) => mdParser.render(text)}
               value={product.description_markdown}
               view={{ menu: false, md: false, html: true }}

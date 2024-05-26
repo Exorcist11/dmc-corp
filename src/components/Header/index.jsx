@@ -1,5 +1,4 @@
 import { SlUser, SlBag, SlMagnifier } from "react-icons/sl";
-import { MdOutlineNoAccounts } from "react-icons/md";
 
 import { useNavigate } from "react-router-dom";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -29,6 +28,7 @@ import Cart from "../Cart/Cart";
 import { Input } from "../ui/input";
 import { useState } from "react";
 import { Button } from "../ui/button";
+import CartNotLogin from "../Cart/CartNotLogin";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -171,10 +171,7 @@ export default function Header() {
       ) : (
         <div>
           <SheetContent className="h-full">
-            <div className="h-full flex flex-col items-center justify-center">
-              <MdOutlineNoAccounts size={100}/>
-              <h1>Vui lòng đăng nhập để sử dụng giỏ hàng</h1>
-            </div>
+            <CartNotLogin />
           </SheetContent>
         </div>
       )}
