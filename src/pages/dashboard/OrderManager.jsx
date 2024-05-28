@@ -30,7 +30,7 @@ import { useNavigate } from "react-router-dom";
 export default function OrderManager() {
   const [search, setSearch] = useState("");
   const [order, setOrder] = useState([]);
-  const rowPerPage = 10;
+  const rowPerPage = 5;
   const [startIndex, setStartIndex] = useState(0);
   const [endIndex, setEndIndex] = useState(rowPerPage);
 
@@ -93,6 +93,8 @@ export default function OrderManager() {
         return <h1>Thanh toán khi nhận hàng (COD)</h1>;
       case "banking":
         return <h1>Thanh toán bằng thẻ ngân hàng</h1>;
+      case "vn-pay":
+        return <h1>Thanh toán VNPAY</h1>;
       default:
         return null;
     }
@@ -121,12 +123,12 @@ export default function OrderManager() {
           />
 
           <div className="flex items-center gap-4">
-            <Button className="bg-gray-500">
+            {/* <Button className="bg-gray-500">
               <SlDoc size={18} color="white" />{" "}
               <label htmlFor="newRole" className="ml-1">
                 Export
               </label>
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>

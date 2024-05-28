@@ -82,12 +82,12 @@ export default function AccountManager() {
               onChange={(e) => setSearch(e.target.value)}
             />
 
-            <Button className="bg-gray-500">
+            {/* <Button className="bg-gray-500">
               <SlDoc size={18} color="white" />{" "}
               <label htmlFor="newRole" className="ml-1">
                 Export
               </label>
-            </Button>
+            </Button> */}
 
             <Button className="bg-[#3478FF] hover:bg-[#004dff]">
               <LiaPlusSolid size={18} color="white" />{" "}

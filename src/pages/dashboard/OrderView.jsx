@@ -64,6 +64,8 @@ export default function OrderView() {
         return <h1>Thanh toán khi nhận hàng (COD)</h1>;
       case "baking":
         return <h1>Thanh toán bằng thẻ ngân hàng</h1>;
+      case "vn-pay":
+        return <h1>Thanh toán VNPAY</h1>;
       default:
         return null;
     }

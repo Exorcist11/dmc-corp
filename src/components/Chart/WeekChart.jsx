@@ -28,9 +28,10 @@ export default function WeekChart() {
     const getReport = async () => {
       await axios
         .get(
-          `http://127.0.0.1:9999/report_month/${new Date().getFullYear()}/${new Date().getMonth()}`
+          `http://127.0.0.1:9999/report_month/${new Date().getFullYear()}/${new Date().getMonth() + 1}`
         )
         .then((res) => setReport(res.data.daily_sales))
+
         .catch((err) => console.log(err));
     };
     getReport();

@@ -69,12 +69,12 @@ export default function ListProduct() {
           />
 
           <div className="flex items-center gap-4">
-            <Button className="bg-gray-500">
+            {/* <Button className="bg-gray-500">
               <SlDoc size={18} color="white" />{" "}
               <label htmlFor="newRole" className="ml-1">
                 Export
               </label>
-            </Button>
+            </Button> */}
             <Button
               className="bg-[#3874FF] font-semibold hover:bg-[#004dff]"
               onClick={() => navigate("/dashboard/new-product")}
